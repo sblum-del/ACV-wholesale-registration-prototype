@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { View, ActiveTab, GmailContext, DealerState, DocSignStatus, ActiveScenario } from './types'
 import { SFInterstitial } from './components/shared/SFInterstitial'
+import { CommentPanel } from './components/shared/CommentPanel'
 
 import { Lobby } from './components/screens/Lobby'
 import { AAValidation } from './components/screens/AAValidation'
@@ -119,8 +120,61 @@ export default function App() {
   }
 
   const sharedProps = { isLoggedIn, onLogout: handleLogout }
+  // Map each view to its screen label for the comment panel
+  const SCREEN_LABELS: Partial<Record<View, [string, string]>> = {
+    'lobby':                      ['LOBBY-1',  'Lobby — Scenario Selection'],
+    'aa-validation':              ['AUTH-1',   'AA Validation — Enter Credentials'],
+    'aa-validation-fail':         ['AUTH-2',   'AA Validation — Identity Not Found'],
+    'create-credentials':         ['AUTH-3',   'Create ACV Login Credentials'],
+    'check-email-mfa':            ['AUTH-4',   'Check Email for Verification Code'],
+    'mfa-code-entry':             ['AUTH-5',   'Enter Email Verification Code'],
+    'gmail-mfa':                  ['AUTH-6',   'Gmail — MFA Confirmation Email'],
+    'existing-user-login':        ['AUTH-7',   'Existing User — Sign In'],
+    'select-dealership':          ['S1-1',     'Select Dealership'],
+    'existing-select-dealership': ['S9-1',     'Existing User — Register Dealership'],
+    'multi-or-single':            ['MULTI-1',  'Single or Multi-Dealer Choice'],
+    'multi-select-dealerships':   ['MULTI-2',  'Select Multiple Dealerships'],
+    'multi-confirm-details':      ['MULTI-3',  'Confirm Multi-Dealer Details'],
+    'multi-success':              ['MULTI-4',  'Multi-Dealer Registration Submitted'],
+    'dealership-info':            ['REG-1',    'Dealership Information'],
+    'terms-of-service':           ['REG-2',    'Terms of Service'],
+    'banking':                    ['REG-3',    'Bank Account Verification'],
+    'ach-form':                   ['REG-4',    'ACH Form'],
+    'ach-processing':             ['REG-5',    'ACH Processing — Validation in Progress'],
+    'ach-result':                 ['REG-6',    'ACH Validation Result'],
+    's11-all-rejected':           ['REG-7',    'All Bank Accounts Rejected'],
+    'docusign-prompt':            ['REG-8',    'DocuSign — Documents Sent Notification'],
+    'docusign-notification':      ['REG-9',    'DocuSign — Check Email'],
+    'gmail-docusign':             ['REG-10',   'Gmail — DocuSign Email'],
+    'qualifying-questions':       ['REG-11',   'Qualifying Questions'],
+    'schedule-demo':              ['REG-12',   'Schedule Demo'],
+    'success':                    ['REG-13',   'Registration Complete'],
+    'salesforce-view':            ['SF-1',     'Salesforce — Application Record'],
+    'sf-interstitial-dealership': ['SF-2',     'Meanwhile — Dealership Info'],
+    'sf-interstitial-multi':      ['SF-3',     'Meanwhile — Multi-Dealer'],
+    'join-flow':                  ['JOIN-1',   'Join Flow — Net-New User'],
+    'join-flow-existing':         ['JOIN-2',   'Join Flow — Existing User'],
+    'in-progress-other-user':     ['RESUME-1', 'In Progress — Started by Another User'],
+    'cancel-in-progress':         ['RESUME-2', 'Cancel Existing Application'],
+    'resume-5m-select':           ['RESUME-3', 'Resume — Select Dealership'],
+    'resume-all-complete':        ['RESUME-4', 'Resume — All Steps Complete'],
+    'dg-intro':                   ['DG-1',     'Dealer Group — Intro'],
+    'dg-aa-validation':           ['DG-2',     'Dealer Group — AA Validation'],
+    'dg-create-credentials':      ['DG-3',     'Dealer Group — Create Credentials'],
+    'dg-check-email':             ['DG-4',     'Dealer Group — Verify Email'],
+    'dg-gmail-mfa':               ['DG-5',     'Dealer Group — Gmail MFA'],
+    'dg-situation':               ['DG-6',     'Dealer Group — Select Situation'],
+    'dg-select-rooftops':         ['DG-7',     'Dealer Group — Select Rooftops'],
+    'dg-sf-interstitial':         ['DG-8',     'Dealer Group — Meanwhile in the Backend'],
+    'dg-success':                 ['DG-9',     'Dealer Group — Registration Submitted'],
+  }
+  const currentLabel = SCREEN_LABELS[view]
+
   return (
     <div className="w-full min-h-screen">
+      {currentLabel && (
+        <CommentPanel screenId={currentLabel[0]} screenName={currentLabel[1]} />
+      )}
       {view === 'lobby' && <Lobby setView={setView} setActiveScenario={setActiveScenario} startScenario={startScenario} />}
 
       {view === 'aa-validation' && (
