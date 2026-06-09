@@ -43,7 +43,7 @@ const resumeScenarios = [
   { num: 4, id: 'R4', scenario: 'r4', clickable: true,  title: 'Returning User — Resumes at Documents (LPOA/Resale Cert)', desc: 'Banking complete. LPOA/Tax Resale not yet signed. Routed to DocuSign prompt.' },
   { num: 5, id: 'R5', scenario: 'r5', clickable: true,  title: 'Returning User — All Steps Complete, Awaiting ACV Review', desc: 'All steps done. Demo not yet scheduled. Status screen shown with qualifying questions + scheduling.' },
   { num: 6, id: 'R6', scenario: 'r6', clickable: true,  title: 'Affiliated User — Application In Progress by Someone Else', desc: 'A different user initiated the application. Read-only status screen shown.' },
-  { num: 7, id: 'CANCEL', scenario: null, clickable: false, title: 'Net-New User — Cancel Existing Application and Start Over', desc: 'User sees another user started registration. Option to cancel existing app and begin fresh.' },
+  { num: 7, id: 'CANCEL', scenario: 'r6n', clickable: true, title: 'Net-New User — Cancel Existing Application and Start Over', desc: 'User sees another user started registration. Option to cancel existing app and begin fresh.' },
 ]
 
 // ── STAKEHOLDER FEEDBACK TAB ─────────────────────────────────────
