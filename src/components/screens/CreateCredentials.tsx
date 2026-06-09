@@ -34,7 +34,7 @@ export function CreateCredentials({ setView, onLobby }: Props) {
         <div className="max-w-lg w-full">
           <h2 className="font-bold text-3xl text-[#0E0E0F]">Create your ACV login</h2>
           <p className="text-sm text-[#55575C] mt-2 mb-6">
-            We found your AuctionAccess record. Set up your ACV account credentials below.
+            Your identity has been verified. Set up your ACV login credentials to complete account creation.
           </p>
 
           <div className="bg-[#EFF6FF] border border-[#BFD9F7] rounded-lg p-3 flex items-center gap-2 mb-6">
@@ -54,9 +54,9 @@ export function CreateCredentials({ setView, onLobby }: Props) {
             </button>
             <PrimaryButton
               disabled={!canContinue}
-              onClick={() => setView('check-email-mfa')}
+              onClick={() => setView('select-dealership')}
             >
-              Continue
+              Continue →
             </PrimaryButton>
           </div>
         </div>

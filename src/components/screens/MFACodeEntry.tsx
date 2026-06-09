@@ -16,15 +16,24 @@ export function MFACodeEntry({ setView, setLoggedIn, onLobby, activeScenario }: 
   const [error, setError] = useState(false)
   const [verified, setVerified] = useState(false)
 
-  // Any 6-digit code works for the prototype
+  const existingUserScenarios = ['s9', 's8b', 'r1', 'r2', 'r3', 'r4', 'r5', 'r6']
+  const isExistingUser = existingUserScenarios.includes(activeScenario ?? '')
+
   const handleVerify = () => {
     if (code.length === 6) {
       setError(false)
       setVerified(true)
-      setLoggedIn(true)
+      if (isExistingUser) setLoggedIn(true)
     } else {
       setError(true)
     }
+  }
+
+  const getNextView = (): View => {
+    if (isExistingUser) return 'existing-user-login'
+    if (activeScenario === 's8') return 'join-flow'
+    if (activeScenario === 'r6n') return 'in-progress-other-user'
+    return 'create-credentials'
   }
 
   const handleResend = () => {
@@ -97,19 +106,23 @@ export function MFACodeEntry({ setView, setLoggedIn, onLobby, activeScenario }: 
               <div className="w-16 h-16 rounded-full bg-[#ECFDF5] flex items-center justify-center mx-auto mb-6">
                 <span className="text-3xl text-[#00A576]">✓</span>
               </div>
-              <h2 className="font-bold text-2xl text-[#0E0E0F]">Email verified!</h2>
-              <p className="text-sm text-[#55575C] mt-3 mb-8">
-                Your account is confirmed. You're now logged in and can continue your registration.
+              <h2 className="font-bold text-2xl text-[#0E0E0F]">Identity Verified!</h2>
+              <p className="text-sm text-[#55575C] mt-3 mb-2">
+                {isExistingUser
+                  ? 'We found an existing ACV account linked to this AuctionAccess ID. Please sign in to continue.'
+                  : 'Your AuctionAccess identity has been confirmed. Let\'s set up your ACV login credentials.'}
               </p>
+              {!isExistingUser && (
+                <p className="text-xs text-[#8D9199] mb-8">
+                  This is your first time registering with ACV.
+                </p>
+              )}
+              {isExistingUser && <div className="mb-8" />}
               <PrimaryButton
-                onClick={() =>
-                  activeScenario === 's8' ? setView('join-flow')
-                  : activeScenario === 'r6n' ? setView('in-progress-other-user')
-                  : setView('select-dealership')
-                }
+                onClick={() => setView(getNextView())}
                 className="w-full justify-center"
               >
-                Continue to Registration →
+                {isExistingUser ? 'Sign In to ACV →' : 'Create ACV Login →'}
               </PrimaryButton>
             </>
           )}

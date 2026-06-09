@@ -10,19 +10,13 @@ interface Props {
   activeScenario?: ActiveScenario
 }
 
-export function AAValidation({ setView, onLobby, activeScenario }: Props) {
+export function AAValidation({ setView, onLobby }: Props) {
   const [aaid, setAaid] = useState('')
   const [last4, setLast4] = useState('')
 
-  const existingUserResume = ['r1','r2','r3','r4','r5','r6'] // r6n is net-new
-  const isExistingUser = activeScenario === 's9' || activeScenario === 's8b' || existingUserResume.includes(activeScenario ?? '')
-
+  // AA validation always routes to MFA first — user type determined after verification
   const handleContinue = () => {
-    if (isExistingUser) {
-      setView('existing-user-login')
-    } else {
-      setView('create-credentials')
-    }
+    setView('mfa-code-entry')
   }
 
   return (
@@ -63,12 +57,11 @@ export function AAValidation({ setView, onLobby, activeScenario }: Props) {
             />
           </div>
 
-          {/* Existing user hint — shows after both fields filled for S9 */}
-          {isExistingUser && aaid && last4 && (
+          {aaid && last4 && (
             <div className="mt-5 bg-[#EFF6FF] border border-[#BFD9F7] rounded-lg px-4 py-3 flex items-start gap-3">
               <span className="text-[#0077D8] text-base shrink-0">ℹ️</span>
               <p className="text-sm text-[#004E7D]">
-                An account with this AuctionAccess ID already exists in ACV. Please sign in to continue.
+                We'll send a verification code to the email address on file with AuctionAccess to confirm your identity.
               </p>
             </div>
           )}
@@ -78,7 +71,7 @@ export function AAValidation({ setView, onLobby, activeScenario }: Props) {
               Back
             </button>
             <PrimaryButton onClick={handleContinue} disabled={!aaid || !last4}>
-              {isExistingUser && aaid && last4 ? 'Sign In →' : 'Continue'}
+              Send Verification Code →
             </PrimaryButton>
           </div>
         </div>
