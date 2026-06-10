@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { View } from '../../types'
+import type { View, ActiveScenario } from '../../types'
 import { MaterialField } from '../shared/MaterialField'
 import { PrimaryButton } from '../shared/PrimaryButton'
 import { ScreenLabel } from '../shared/ScreenLabel'
@@ -7,9 +7,10 @@ import { ScreenLabel } from '../shared/ScreenLabel'
 interface Props {
   setView: (v: View) => void
   onLobby?: () => void
+  activeScenario?: ActiveScenario
 }
 
-export function CreateCredentials({ setView, onLobby }: Props) {
+export function CreateCredentials({ setView, onLobby, activeScenario }: Props) {
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
 
@@ -54,7 +55,7 @@ export function CreateCredentials({ setView, onLobby }: Props) {
             </button>
             <PrimaryButton
               disabled={!canContinue}
-              onClick={() => setView('select-dealership')}
+              onClick={() => activeScenario === 'r6n' ? setView('in-progress-other-user') : setView('select-dealership')}
             >
               Continue →
             </PrimaryButton>

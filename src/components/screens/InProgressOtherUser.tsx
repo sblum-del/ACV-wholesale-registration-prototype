@@ -6,14 +6,13 @@ interface Props {
   isLoggedIn?: boolean
   onLogout?: () => void
   applicationCancelled?: boolean
-  isExistingUser?: boolean // r6 = existing user (has another registered dealership), r6n = net-new
+  isExistingUser?: boolean
 }
 
 export function InProgressOtherUser({ setView, applicationCancelled, isExistingUser }: Props) {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <ScreenLabel id="RESUME-1" name="In Progress — Started by Another User" />
-      {/* Header — matches register dealership screens */}
       <div className="border-b border-[#E8E9EB] h-16 flex items-center justify-between px-10 shrink-0">
         <div className="flex flex-col leading-none">
           <span className="font-black text-2xl text-[#F26522]">ACV</span>
@@ -36,6 +35,7 @@ export function InProgressOtherUser({ setView, applicationCancelled, isExistingU
         </p>
         <p className="text-sm text-[#55575C] mb-6">Please choose a dealership to continue</p>
 
+        {/* Cancelled confirmation banner */}
         {applicationCancelled && (
           <div className="bg-[#ECFDF5] border border-[#00A576] rounded-xl px-5 py-3 mb-4 flex items-center gap-3">
             <span className="text-[#00A576] font-bold">✓</span>
@@ -45,8 +45,8 @@ export function InProgressOtherUser({ setView, applicationCancelled, isExistingU
           </div>
         )}
 
-        {/* 5M card */}
-        <div className={`border rounded-xl px-5 py-4 flex items-center justify-between ${applicationCancelled ? 'border-[#E8E9EB]' : 'border-[#E8E9EB]'}`}>
+        {/* In-progress dealership card */}
+        <div className="border border-[#E8E9EB] rounded-xl px-5 py-4 flex items-center justify-between mb-3">
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               <span className="font-semibold text-[15px] text-[#0E0E0F]">Metro Ford of Albany</span>
@@ -61,9 +61,11 @@ export function InProgressOtherUser({ setView, applicationCancelled, isExistingU
             onClick={() => applicationCancelled ? setView('sf-interstitial-1') : setView('cancel-in-progress')}
             className={`text-sm font-semibold cursor-pointer hover:underline flex items-center gap-1 shrink-0 ml-4 ${applicationCancelled ? 'text-[#004E7D]' : 'text-[#DC2626]'}`}
           >
-            {applicationCancelled ? 'Start Registration →' : 'Cancel ›'}
+            {applicationCancelled ? 'Start Registration ›' : 'Cancel ›'}
           </button>
-        {/* Existing user: show a second dealership that is already Registered/Joined — explains why they have ACV creds */}
+        </div>
+
+        {/* Existing user only: already-registered dealership explains why they have ACV creds */}
         {isExistingUser && !applicationCancelled && (
           <>
             <p className="text-sm text-[#55575C] mt-6 mb-3">
@@ -82,7 +84,6 @@ export function InProgressOtherUser({ setView, applicationCancelled, isExistingU
             </div>
           </>
         )}
-        </div>
       </div>
 
       <div className="mt-auto px-10 py-5 flex justify-between text-xs text-[#8D9199] border-t border-[#E8E9EB]">

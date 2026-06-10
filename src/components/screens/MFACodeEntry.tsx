@@ -32,7 +32,7 @@ export function MFACodeEntry({ setView, setLoggedIn, onLobby, activeScenario }: 
   const getNextView = (): View => {
     if (isExistingUser) return 'existing-user-login'
     if (activeScenario === 's8') return 'join-flow'
-    if (activeScenario === 'r6n') return 'in-progress-other-user'
+    // r6n = net-new user, must create credentials before seeing in-progress screen
     return 'create-credentials'
   }
 

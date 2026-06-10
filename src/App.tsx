@@ -235,7 +235,7 @@ export default function App() {
       )}
 
       {view === 'create-credentials' && (
-        <CreateCredentials setView={setView} onLobby={() => setView('lobby')} />
+        <CreateCredentials setView={setView} onLobby={() => setView('lobby')} activeScenario={activeScenario} />
       )}
 
       {view === 'check-email-mfa' && (
