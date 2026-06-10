@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import type { View, ActiveTab, GmailContext, DealerState, DocSignStatus, ActiveScenario } from './types'
 import { SFInterstitial } from './components/shared/SFInterstitial'
-import { CommentPanel } from './components/shared/CommentPanel'
 
 import { Lobby } from './components/screens/Lobby'
 import { AAValidation } from './components/screens/AAValidation'
@@ -120,63 +119,8 @@ export default function App() {
   }
 
   const sharedProps = { isLoggedIn, onLogout: handleLogout }
-  // Scenario-aware screen label lookup
-  // Each scenario has its own sequential screen numbers: S1-1, S1-2... S9-5, etc.
-  type ScreenEntry = [string, string, string] // [view, label, name]
-  const SCENARIO_SCREENS: Record<string, ScreenEntry[]> = {
-    'S1':  [['aa-validation','S1-1','AA Validation'],['mfa-code-entry','S1-2','Enter Verification Code'],['create-credentials','S1-3','Create ACV Login'],['select-dealership','S1-4','Select Dealership'],['sf-interstitial-1','S1-5','Meanwhile — Registration Created'],['dealership-info','S1-6','Dealership Information'],['sf-interstitial-dealership','S1-7','Meanwhile — Dealership Info Saved'],['terms-of-service','S1-8','Terms of Service'],['sf-interstitial-2','S1-9','Meanwhile — ToS Accepted'],['banking','S1-10','Bank Account Verification'],['sf-interstitial-3','S1-11','Meanwhile — Banking Complete'],['docusign-prompt','S1-12','DocuSign — Documents Notification'],['gmail-docusign','S1-13','Gmail — DocuSign Email'],['docusign-prompt-post-banking','S1-14','DocuSign — Sign Documents'],['qualifying-questions','S1-15','Qualifying Questions'],['schedule-demo','S1-16','Schedule Demo'],['sf-interstitial-4','S1-17','Meanwhile — Demo Scheduled'],['salesforce-view','S1-18','Salesforce — Application Record'],['success','S1-19','Registration Complete']],
-    'S2':  [['aa-validation','S2-1','AA Validation'],['mfa-code-entry','S2-2','Enter Verification Code'],['create-credentials','S2-3','Create ACV Login'],['select-dealership','S2-4','Select Dealership — Multiple Available'],['sf-interstitial-1','S2-5','Meanwhile — Registration Created'],['dealership-info','S2-6','Dealership Information'],['sf-interstitial-dealership','S2-7','Meanwhile — Dealership Info Saved'],['terms-of-service','S2-8','Terms of Service'],['banking','S2-9','Bank Account Verification'],['docusign-prompt-post-banking','S2-10','DocuSign — Documents Notification'],['qualifying-questions','S2-11','Qualifying Questions'],['schedule-demo','S2-12','Schedule Demo'],['success','S2-13','Registration Complete']],
-    'S3':  [['aa-validation','S3-1','AA Validation'],['mfa-code-entry','S3-2','Enter Verification Code'],['create-credentials','S3-3','Create ACV Login'],['select-dealership','S3-4','Select Dealership'],['sf-interstitial-1','S3-5','Meanwhile — Registration Created'],['dealership-info','S3-6','Dealership Information'],['terms-of-service','S3-7','Terms of Service'],['banking','S3-8','Bank Account — Multiple Verified'],['docusign-prompt-post-banking','S3-9','DocuSign — Documents Notification'],['qualifying-questions','S3-10','Qualifying Questions'],['schedule-demo','S3-11','Schedule Demo'],['success','S3-12','Registration Complete']],
-    'S4':  [['aa-validation','S4-1','AA Validation'],['mfa-code-entry','S4-2','Enter Verification Code'],['create-credentials','S4-3','Create ACV Login'],['select-dealership','S4-4','Select Dealership'],['sf-interstitial-1','S4-5','Meanwhile — Registration Created'],['dealership-info','S4-6','Dealership Information'],['terms-of-service','S4-7','Terms of Service'],['banking','S4-8','Bank Account Verification'],['docusign-prompt-post-banking','S4-9','DocuSign — LPOA Only (Alabama)'],['gmail-docusign','S4-10','Gmail — DocuSign Email'],['qualifying-questions','S4-11','Qualifying Questions'],['schedule-demo','S4-12','Schedule Demo'],['success','S4-13','Registration Complete']],
-    'S5':  [['aa-validation','S5-1','AA Validation'],['mfa-code-entry','S5-2','Enter Verification Code'],['create-credentials','S5-3','Create ACV Login'],['select-dealership','S5-4','Select Dealership'],['sf-interstitial-1','S5-5','Meanwhile — Registration Created'],['dealership-info','S5-6','Dealership Information'],['terms-of-service','S5-7','Terms of Service'],['banking','S5-8','Bank Account Verification'],['docusign-prompt-post-banking','S5-9','DocuSign — LPOA Only (Oregon)'],['qualifying-questions','S5-10','Qualifying Questions'],['schedule-demo','S5-11','Schedule Demo'],['success','S5-12','Registration Complete']],
-    'S6':  [['aa-validation','S6-1','AA Validation'],['mfa-code-entry','S6-2','Enter Verification Code'],['create-credentials','S6-3','Create ACV Login'],['select-dealership','S6-4','Select Dealership'],['sf-interstitial-1','S6-5','Meanwhile — Registration Created'],['dealership-info','S6-6','Dealership Information'],['terms-of-service','S6-7','Terms of Service'],['banking','S6-8','Bank Account — Mixed JPMorgan Results'],['docusign-prompt-post-banking','S6-9','DocuSign — Documents Notification'],['qualifying-questions','S6-10','Qualifying Questions'],['schedule-demo','S6-11','Schedule Demo'],['success','S6-12','Registration Complete']],
-    'S7':  [['aa-validation-fail','S7-1','AA Validation — Identity Not Found']],
-    'S8':  [['aa-validation','S8-1','AA Validation'],['mfa-code-entry','S8-2','Enter Verification Code'],['create-credentials','S8-3','Create ACV Login'],['join-flow','S8-4','All Dealerships Registered — Join Flow']],
-    'S8B': [['aa-validation','S8B-1','AA Validation'],['mfa-code-entry','S8B-2','Enter Verification Code'],['existing-user-login','S8B-3','Sign In'],['join-flow-existing','S8B-4','All Dealerships Registered — Join Flow']],
-    'S9':  [['aa-validation','S9-1','AA Validation'],['mfa-code-entry','S9-2','Enter Verification Code'],['existing-user-login','S9-3','Sign In'],['existing-select-dealership','S9-4','Select Dealership'],['sf-interstitial-1','S9-5','Meanwhile — Registration Created'],['dealership-info','S9-6','Dealership Information'],['terms-of-service','S9-7','Terms of Service'],['banking','S9-8','Bank Account Verification'],['docusign-prompt-post-banking','S9-9','DocuSign — Documents Notification'],['qualifying-questions','S9-10','Qualifying Questions'],['schedule-demo','S9-11','Schedule Demo'],['success','S9-12','Registration Complete']],
-    'S10': [['aa-validation','S10-1','AA Validation'],['mfa-code-entry','S10-2','Enter Verification Code'],['create-credentials','S10-3','Create ACV Login'],['select-dealership','S10-4','Select Dealership'],['sf-interstitial-1','S10-5','Meanwhile — Registration Created'],['dealership-info','S10-6','Dealership Information'],['terms-of-service','S10-7','Terms of Service'],['banking','S10-8','Bank Account — No Accounts on File'],['ach-form','S10-9','ACH Form'],['ach-processing','S10-10','ACH Processing — Validation in Progress'],['ach-result','S10-11','ACH Validation Result'],['docusign-prompt-post-banking','S10-12','DocuSign — Documents Notification'],['qualifying-questions','S10-13','Qualifying Questions'],['schedule-demo','S10-14','Schedule Demo'],['success','S10-15','Registration Complete']],
-    'S11': [['aa-validation','S11-1','AA Validation'],['mfa-code-entry','S11-2','Enter Verification Code'],['create-credentials','S11-3','Create ACV Login'],['select-dealership','S11-4','Select Dealership'],['sf-interstitial-1','S11-5','Meanwhile — Registration Created'],['dealership-info','S11-6','Dealership Information'],['terms-of-service','S11-7','Terms of Service'],['banking','S11-8','Bank Account — All Accounts Shown'],['s11-all-rejected','S11-9','All Accounts JPMorgan Rejected'],['ach-form','S11-10','ACH Form — Alternative Account'],['ach-processing','S11-11','ACH Processing — Validation in Progress'],['ach-result','S11-12','ACH Validation Result'],['docusign-prompt-post-banking','S11-13','DocuSign — Documents Notification'],['qualifying-questions','S11-14','Qualifying Questions'],['schedule-demo','S11-15','Schedule Demo'],['success','S11-16','Registration Complete']],
-    'R1':  [['aa-validation','R1-1','AA Validation'],['mfa-code-entry','R1-2','Enter Verification Code'],['existing-user-login','R1-3','Sign In'],['resume-5m-select','R1-4','Resume — Select Dealership'],['dealership-info','R1-5','Resumes at Dealership Information']],
-    'R2':  [['aa-validation','R2-1','AA Validation'],['mfa-code-entry','R2-2','Enter Verification Code'],['existing-user-login','R2-3','Sign In'],['resume-5m-select','R2-4','Resume — Select Dealership'],['terms-of-service','R2-5','Resumes at Terms of Service']],
-    'R3':  [['aa-validation','R3-1','AA Validation'],['mfa-code-entry','R3-2','Enter Verification Code'],['existing-user-login','R3-3','Sign In'],['resume-5m-select','R3-4','Resume — Select Dealership'],['banking','R3-5','Resumes at Bank Account']],
-    'R4':  [['aa-validation','R4-1','AA Validation'],['mfa-code-entry','R4-2','Enter Verification Code'],['existing-user-login','R4-3','Sign In'],['resume-5m-select','R4-4','Resume — Select Dealership'],['docusign-prompt-post-banking','R4-5','Resumes at DocuSign']],
-    'R5':  [['aa-validation','R5-1','AA Validation'],['mfa-code-entry','R5-2','Enter Verification Code'],['existing-user-login','R5-3','Sign In'],['resume-5m-select','R5-4','Resume — Select Dealership'],['resume-all-complete','R5-5','All Steps Complete — Awaiting Review']],
-    'R6':  [['aa-validation','R6-1','AA Validation'],['mfa-code-entry','R6-2','Enter Verification Code'],['existing-user-login','R6-3','Sign In'],['resume-5m-select','R6-4','Resume — Select Dealership'],['resume-all-complete','R6-5','In Progress by Another User']],
-    'CANCEL': [['aa-validation','CANCEL-1','AA Validation'],['mfa-code-entry','CANCEL-2','Enter Verification Code'],['create-credentials','CANCEL-3','Create ACV Login'],['in-progress-other-user','CANCEL-4','In Progress — Started by Another User'],['cancel-in-progress','CANCEL-5','Cancel Existing Application'],['sf-interstitial-cancel-restart','CANCEL-6','Meanwhile — New Registration Created'],['dealership-info','CANCEL-7','Dealership Information']],
-    'LOBBY': [['lobby','LOBBY-1','Lobby — Interactive Prototype']],
-    'EXEC':  [['exec-summary','EXEC-1','Executive Summary']],
-  }
-
-  // Find current screen label based on active scenario
-  const scenarioKey = activeScenario ? activeScenario.toUpperCase() : 'LOBBY'
-  const scenarioScreens = SCENARIO_SCREENS[scenarioKey] ?? SCENARIO_SCREENS['LOBBY']
-  const currentScreenEntry = scenarioScreens?.find(([v]) => v === view)
-  const currentLabel = currentScreenEntry ? [currentScreenEntry[1], currentScreenEntry[2]] as [string, string] : null
-
-  // Lobby and SF interstitial screens always get a label even if scenario mapping misses them
-  const fallbackLabels: Partial<Record<View, [string, string]>> = {
-    'lobby':                   ['LOBBY-1', 'Lobby — Interactive Prototype'],
-    'sf-interstitial-multi':   ['MULTI-SF', 'Meanwhile — Multi-Dealer'],
-    'multi-or-single':         ['MULTI-1',  'Single or Multi-Dealer Choice'],
-    'multi-select-dealerships':['MULTI-2',  'Select Multiple Dealerships'],
-    'multi-confirm-details':   ['MULTI-3',  'Confirm Multi-Dealer Details'],
-    'multi-success':           ['MULTI-4',  'Multi-Dealer Registration Submitted'],
-    'dg-intro':                ['DG-1',     'Dealer Group — Intro'],
-    'dg-aa-validation':        ['DG-2',     'Dealer Group — AA Validation'],
-    'dg-create-credentials':   ['DG-3',     'Dealer Group — Create Credentials'],
-    'dg-check-email':          ['DG-4',     'Dealer Group — Verify Email'],
-    'dg-situation':            ['DG-6',     'Dealer Group — Select Situation'],
-    'dg-select-rooftops':      ['DG-7',     'Dealer Group — Select Rooftops'],
-    'dg-sf-interstitial':      ['DG-8',     'Dealer Group — Meanwhile in the Backend'],
-    'dg-success':              ['DG-9',     'Dealer Group — Registration Submitted'],
-  }
-  const resolvedLabel = currentLabel ?? fallbackLabels[view] ?? null
-
   return (
     <div className="w-full min-h-screen">
-      {resolvedLabel && view !== 'lobby' && (
-        <CommentPanel screenId={resolvedLabel[0]} screenName={resolvedLabel[1]} />
-      )}
       {view === 'lobby' && <Lobby setView={setView} setActiveScenario={setActiveScenario} startScenario={startScenario} />}
 
       {view === 'aa-validation' && (

@@ -1,9 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import type { View, ActiveScenario } from '../../types'
 import { PrimaryButton } from '../shared/PrimaryButton'
-import { CommentPanel } from '../shared/CommentPanel'
-import { supabase } from '../../lib/supabase'
-import type { Comment } from '../../lib/supabase'
 
 interface Props {
   setView: (v: View) => void
@@ -48,152 +45,15 @@ const resumeScenarios = [
 
 // ── STAKEHOLDER FEEDBACK TAB ─────────────────────────────────────
 function FeedbackTab() {
-  const [comments, setComments] = useState<Comment[]>([])
-  const [loading, setLoading] = useState(true)
-  const [groupBy, setGroupBy] = useState<'person' | 'scenario'>('scenario')
-
-  useEffect(() => {
-    const fetch = async () => {
-      const { data } = await supabase.from('comments').select('*').order('created_at', { ascending: true })
-      if (data) setComments(data)
-      setLoading(false)
-    }
-    fetch()
-    // Real-time subscription
-    const channel = supabase.channel('feedback-tab')
-      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'comments' }, payload => {
-        setComments(prev => [...prev, payload.new as Comment])
-      })
-      .subscribe()
-    return () => { supabase.removeChannel(channel) }
-  }, [])
-
-  const formatTime = (ts: string) => new Date(ts).toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
-
-  const topLevel = comments.filter(c => !c.parent_id)
-  const getReplies = (id: string) => comments.filter(c => c.parent_id === id)
-
-  // Group by scenario prefix (e.g. S1, S9, R2, LOBBY)
-  const getScenarioGroup = (screenId: string) => {
-    const match = screenId.match(/^([A-Z0-9]+B?)-/)
-    return match ? match[1] : screenId
-  }
-
-  const byPerson = topLevel.reduce((acc, c) => {
-    if (!acc[c.author]) acc[c.author] = []
-    acc[c.author].push(c)
-    return acc
-  }, {} as Record<string, Comment[]>)
-
-  const byScenario = topLevel.reduce((acc, c) => {
-    const grp = getScenarioGroup(c.screen_id)
-    if (!acc[grp]) acc[grp] = []
-    acc[grp].push(c)
-    return acc
-  }, {} as Record<string, Comment[]>)
-
-  const CommentCard = ({ c }: { c: Comment }) => {
-    const replies = getReplies(c.id)
-    return (
-      <div className="mb-3">
-        <div className="bg-white border border-[#E8E9EB] rounded-xl p-4">
-          <div className="flex items-start justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-[#0077D8] flex items-center justify-center text-white text-xs font-bold shrink-0">
-                {c.author.charAt(0).toUpperCase()}
-              </div>
-              <div>
-                <span className="text-sm font-semibold text-[#0E0E0F]">{c.author}</span>
-                <span className="text-xs text-[#8D9199] ml-2">{formatTime(c.created_at)}</span>
-              </div>
-            </div>
-            <span className="text-[10px] font-mono bg-[#F7F7F8] border border-[#E8E9EB] rounded px-2 py-0.5 text-[#55575C] shrink-0">
-              {c.screen_id}
-            </span>
-          </div>
-          <p className="text-xs text-[#55575C] mb-1">{c.screen_name}</p>
-          <p className="text-sm text-[#0E0E0F] leading-relaxed">{c.message}</p>
-        </div>
-        {replies.map(r => (
-          <div key={r.id} className="ml-6 mt-2 bg-[#F7F7F8] border border-[#E8E9EB] rounded-xl p-3">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-semibold text-[#0E0E0F]">{r.author}</span>
-              <span className="text-xs text-[#8D9199]">{formatTime(r.created_at)}</span>
-            </div>
-            <p className="text-sm text-[#0E0E0F]">{r.message}</p>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
-  if (loading) return <div className="flex items-center justify-center py-20 text-[#55575C] text-sm">Loading feedback...</div>
-
-  if (comments.length === 0) return (
-    <div className="text-center py-20">
-      <p className="text-3xl mb-3">💬</p>
-      <p className="font-semibold text-[#0E0E0F]">No feedback yet</p>
-      <p className="text-sm text-[#55575C] mt-1">Comments will appear here in real time as stakeholders leave feedback on the prototype screens.</p>
-    </div>
-  )
-
-  const uniquePeople = Object.keys(byPerson)
-  const totalComments = topLevel.length
-  const totalReplies = comments.filter(c => c.parent_id).length
-
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8">
-      {/* Stats */}
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        {[
-          { label: 'Total Comments', value: totalComments },
-          { label: 'Replies', value: totalReplies },
-          { label: 'Contributors', value: uniquePeople.length },
-        ].map(s => (
-          <div key={s.label} className="bg-white border border-[#E8E9EB] rounded-xl p-5 text-center">
-            <p className="text-3xl font-bold text-[#0077D8]">{s.value}</p>
-            <p className="text-xs text-[#55575C] mt-1 font-medium uppercase tracking-wide">{s.label}</p>
-          </div>
-        ))}
+    <div className="flex items-center justify-center py-20 text-center px-6">
+      <div>
+        <p className="text-3xl mb-3">💬</p>
+        <p className="font-semibold text-[#0E0E0F] text-lg">Stakeholder Feedback</p>
+        <p className="text-sm text-[#55575C] mt-2 max-w-md">
+          Feedback collection is being configured. Use Figma's native commenting on the prototype frames to leave feedback on specific screens.
+        </p>
       </div>
-
-      {/* Toggle */}
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="font-bold text-lg text-[#0E0E0F]">All Feedback</h2>
-        <div className="flex border border-[#E8E9EB] rounded-lg overflow-hidden">
-          <button onClick={() => setGroupBy('scenario')} className={`px-4 py-2 text-sm font-medium cursor-pointer transition-colors ${groupBy === 'scenario' ? 'bg-[#0077D8] text-white' : 'bg-white text-[#55575C] hover:bg-[#F7F7F8]'}`}>
-            By Scenario
-          </button>
-          <button onClick={() => setGroupBy('person')} className={`px-4 py-2 text-sm font-medium cursor-pointer transition-colors border-l border-[#E8E9EB] ${groupBy === 'person' ? 'bg-[#0077D8] text-white' : 'bg-white text-[#55575C] hover:bg-[#F7F7F8]'}`}>
-            By Person
-          </button>
-        </div>
-      </div>
-
-      {groupBy === 'scenario' && Object.entries(byScenario).sort().map(([grp, cmts]) => (
-        <div key={grp} className="mb-8">
-          <div className="flex items-center gap-3 mb-3">
-            <span className="text-xs font-bold uppercase tracking-wide bg-[#0E0E0F] text-white rounded px-2 py-1 font-mono">{grp}</span>
-            <span className="text-sm text-[#55575C]">{cmts.length} comment{cmts.length !== 1 ? 's' : ''}</span>
-          </div>
-          {cmts.map(c => <CommentCard key={c.id} c={c} />)}
-        </div>
-      ))}
-
-      {groupBy === 'person' && Object.entries(byPerson).sort().map(([person, cmts]) => (
-        <div key={person} className="mb-8">
-          <div className="flex items-center gap-3 mb-3">
-            <div className="w-8 h-8 rounded-full bg-[#0077D8] flex items-center justify-center text-white text-sm font-bold shrink-0">
-              {person.charAt(0).toUpperCase()}
-            </div>
-            <div>
-              <span className="text-sm font-bold text-[#0E0E0F]">{person}</span>
-              <span className="text-xs text-[#55575C] ml-2">{cmts.length} comment{cmts.length !== 1 ? 's' : ''}</span>
-            </div>
-          </div>
-          {cmts.map(c => <CommentCard key={c.id} c={c} />)}
-        </div>
-      ))}
     </div>
   )
 }
@@ -301,13 +161,7 @@ export function Lobby({ setView, startScenario }: Props) {
         </div>
       </div>
 
-      {/* Comment panel on exec + prototype tabs */}
-      {(activeTab === 'exec' || activeTab === 'prototype') && (
-        <CommentPanel
-          screenId={activeTab === 'exec' ? 'EXEC-1' : 'LOBBY-1'}
-          screenName={activeTab === 'exec' ? 'Executive Summary' : 'Lobby — Interactive Prototype'}
-        />
-      )}
+
 
       {/* ── EXEC SUMMARY ── */}
       {activeTab === 'exec' && (
