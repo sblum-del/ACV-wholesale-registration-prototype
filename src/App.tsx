@@ -167,7 +167,12 @@ export default function App() {
       )}
 
       {view === 'in-progress-other-user' && (
-        <InProgressOtherUser setView={setView} applicationCancelled={applicationCancelled} {...sharedProps} />
+        <InProgressOtherUser
+          setView={setView}
+          applicationCancelled={applicationCancelled}
+          isExistingUser={activeScenario === 'r6'}
+          {...sharedProps}
+        />
       )}
 
       {view === 'cancel-in-progress' && (

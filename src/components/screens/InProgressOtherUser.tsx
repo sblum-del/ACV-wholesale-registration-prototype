@@ -6,9 +6,10 @@ interface Props {
   isLoggedIn?: boolean
   onLogout?: () => void
   applicationCancelled?: boolean
+  isExistingUser?: boolean // r6 = existing user (has another registered dealership), r6n = net-new
 }
 
-export function InProgressOtherUser({ setView, applicationCancelled }: Props) {
+export function InProgressOtherUser({ setView, applicationCancelled, isExistingUser }: Props) {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <ScreenLabel id="RESUME-1" name="In Progress — Started by Another User" />
@@ -31,7 +32,7 @@ export function InProgressOtherUser({ setView, applicationCancelled }: Props) {
       <div className="max-w-3xl mx-auto w-full px-6 pt-10 pb-16">
         <h2 className="font-bold text-2xl text-[#0E0E0F] mb-1">Register Dealership</h2>
         <p className="text-sm text-[#55575C] mb-1">
-          Your AuctionAccess account is linked to 1 dealership.
+          Your AuctionAccess account is linked to {isExistingUser ? '2 dealerships' : '1 dealership'}.
         </p>
         <p className="text-sm text-[#55575C] mb-6">Please choose a dealership to continue</p>
 
@@ -62,6 +63,25 @@ export function InProgressOtherUser({ setView, applicationCancelled }: Props) {
           >
             {applicationCancelled ? 'Start Registration →' : 'Cancel ›'}
           </button>
+        {/* Existing user: show a second dealership that is already Registered/Joined — explains why they have ACV creds */}
+        {isExistingUser && !applicationCancelled && (
+          <>
+            <p className="text-sm text-[#55575C] mt-6 mb-3">
+              These dealerships are already on ACV. Look for the Joined status to see where you're already active.
+            </p>
+            <div className="border border-[#E8E9EB] rounded-xl px-5 py-4 flex items-center justify-between bg-[#F9FAFB]">
+              <div>
+                <div className="flex items-center gap-2 mb-0.5">
+                  <span className="font-semibold text-[15px] text-[#8D9199]">Speed Auto Group</span>
+                  <span className="bg-[#ECFDF5] text-[#00A576] text-xs font-medium rounded px-2 py-0.5">Registered</span>
+                  <span className="bg-[#EFF6FF] text-[#0077D8] text-xs font-medium rounded px-2 py-0.5">Joined</span>
+                </div>
+                <span className="text-sm text-[#8D9199]">Albany, New York</span>
+              </div>
+              <span className="text-xs text-[#8D9199] italic shrink-0 ml-4">You're already active here</span>
+            </div>
+          </>
+        )}
         </div>
       </div>
 

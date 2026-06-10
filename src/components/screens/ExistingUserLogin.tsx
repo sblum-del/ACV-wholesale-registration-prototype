@@ -16,10 +16,12 @@ export function ExistingUserLogin({ setView, setLoggedIn, onLobby, activeScenari
 
   const handleSignIn = () => {
     setLoggedIn(true)
-    const resumeScenarios = ['r1','r2','r3','r4','r5','r6']
     if (activeScenario === 's8b') {
       setView('join-flow-existing')
-    } else if (resumeScenarios.includes(activeScenario ?? '')) {
+    } else if (activeScenario === 'r6') {
+      // r6 = existing user sees in-progress app started by someone else
+      setView('in-progress-other-user')
+    } else if (['r1','r2','r3','r4','r5'].includes(activeScenario ?? '')) {
       setView('resume-5m-select')
     } else {
       setView('existing-select-dealership')
