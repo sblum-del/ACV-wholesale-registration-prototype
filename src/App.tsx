@@ -8,6 +8,7 @@ import { ExistingUserLogin } from './components/screens/ExistingUserLogin'
 import { ExistingSelectDealership } from './components/screens/ExistingSelectDealership'
 import { AAValidationFail } from './components/screens/AAValidationFail'
 import { JoinFlow } from './components/screens/JoinFlow'
+import { MockSFCancel } from './components/screens/MockSFCancel'
 import { JoinFlowExisting } from './components/screens/JoinFlowExisting'
 import { CreateCredentials } from './components/screens/CreateCredentials'
 import { CheckEmailMFA } from './components/screens/CheckEmailMFA'
@@ -56,6 +57,7 @@ export default function App() {
   const [, setPrimaryBankSelected] = useState(false)
   const [achVerified, setAchVerified] = useState(true)
   const [preferredFlagCarried, setPreferredFlagCarried] = useState(false)
+  const [applicationCancelled, setApplicationCancelled] = useState(false)
   const [activeScenario, setActiveScenario] = useState<ActiveScenario>('s1')
   const [tosScrolled, setTosScrolled] = useState(false)
   const [mobileNumber, setMobileNumber] = useState('')
@@ -165,11 +167,15 @@ export default function App() {
       )}
 
       {view === 'in-progress-other-user' && (
-        <InProgressOtherUser setView={setView} {...sharedProps} />
+        <InProgressOtherUser setView={setView} applicationCancelled={applicationCancelled} {...sharedProps} />
       )}
 
       {view === 'cancel-in-progress' && (
         <CancelInProgress setView={setView} {...sharedProps} />
+      )}
+
+      {view === 'mock-sf-cancel' && (
+        <MockSFCancel setView={setView} setApplicationCancelled={setApplicationCancelled} />
       )}
 
       {view === 'sf-interstitial-cancel-restart' && (

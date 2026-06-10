@@ -40,6 +40,7 @@ export type View =
   | 'in-progress-other-user'
   | 'cancel-in-progress'
   | 'sf-interstitial-cancel-restart'
+  | 'mock-sf-cancel'
   | 'sf-interstitial-3'
   | 'docusign-notification'
   | 'docusign-prompt-post-banking'

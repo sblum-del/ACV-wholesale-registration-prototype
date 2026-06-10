@@ -39,8 +39,11 @@ const resumeScenarios = [
   { num: 3, id: 'R3', scenario: 'r3', clickable: true,  title: 'Returning User — Resumes at Bank Account', desc: 'ToS complete. Banking Collection Status false. Routed to banking screen.' },
   { num: 4, id: 'R4', scenario: 'r4', clickable: true,  title: 'Returning User — Resumes at Documents (LPOA/Resale Cert)', desc: 'Banking complete. LPOA/Tax Resale not yet signed. Routed to DocuSign prompt.' },
   { num: 5, id: 'R5', scenario: 'r5', clickable: true,  title: 'Returning User — All Steps Complete, Awaiting ACV Review', desc: 'All steps done. Demo not yet scheduled. Status screen shown with qualifying questions + scheduling.' },
-  { num: 6, id: 'R6', scenario: 'r6', clickable: true,  title: 'Affiliated User — Application In Progress by Someone Else', desc: 'A different user initiated the application. Read-only status screen shown.' },
-  { num: 7, id: 'CANCEL', scenario: 'r6n', clickable: true, title: 'Net-New User — Cancel Existing Application and Start Over', desc: 'User sees another user started registration. Option to cancel existing app and begin fresh.' },
+]
+
+const inProgressScenarios = [
+  { num: 1, id: 'R6',     scenario: 'r6',  clickable: true, title: 'Affiliated User — Application In Progress by Someone Else', desc: 'A different user affiliated with the same dealership sees an in-progress application they did not start. Read-only status shown — they must contact the registration specialist to take action.' },
+  { num: 2, id: 'CANCEL', scenario: 'r6n', clickable: true, title: 'Net-New User — Requests Cancellation via Registration Specialist', desc: 'Net-new user encounters an in-progress application. They contact Rob Smyton to cancel. The specialist cancels via Salesforce — dealership then appears as available to register fresh.' },
 ]
 
 // ── STAKEHOLDER FEEDBACK TAB ─────────────────────────────────────
@@ -230,13 +233,13 @@ export function Lobby({ setView, startScenario }: Props) {
             })}
           </div>
 
-          <p className="text-xs tracking-[0.12em] text-[#55575C] font-semibold uppercase mb-4">Returning User Scenarios</p>
+          <p className="text-xs tracking-[0.12em] text-[#55575C] font-semibold uppercase mb-4">Returning User — Resume Registration</p>
           <div className="bg-white border border-[#E8E9EB] rounded-xl px-6 py-4 mb-5 max-w-4xl">
             <p className="text-sm text-[#55575C] leading-relaxed">
-              <span className="font-semibold text-[#0E0E0F]">How resuming works.</span> Registration progress is tied to a single verified AuctionAccess user. The same user who initiated can return and resume. A different affiliated user cannot resume — they see the current status and can optionally cancel and start fresh.
+              <span className="font-semibold text-[#0E0E0F]">How resuming works.</span> Registration progress is tied to a single verified AuctionAccess user. The same user who initiated can return and resume at any checkpoint. A different affiliated user cannot resume — they see the current status and must contact a specialist to take further action.
             </p>
           </div>
-          <div className="grid grid-cols-3 gap-5">
+          <div className="grid grid-cols-3 gap-5 mb-12">
             {resumeScenarios.map(s => (
               <div key={s.id} className="bg-white rounded-xl border border-[#E8E9EB] p-6 flex flex-col">
                 <div className="flex items-center gap-2 mb-3">
@@ -252,6 +255,28 @@ export function Lobby({ setView, startScenario }: Props) {
                 ) : (
                   <button className="mt-5 w-full bg-[#EBEBEF] text-[#55575C] rounded-full py-3 text-sm font-semibold cursor-not-allowed">Coming Soon</button>
                 )}
+              </div>
+            ))}
+          </div>
+
+          <p className="text-xs tracking-[0.12em] text-[#55575C] font-semibold uppercase mb-4">Dealership Registration — Application Already In Progress</p>
+          <div className="bg-white border border-[#E8E9EB] rounded-xl px-6 py-4 mb-5 max-w-4xl">
+            <p className="text-sm text-[#55575C] leading-relaxed">
+              <span className="font-semibold text-[#0E0E0F]">When another user already started registration.</span> If a different affiliated user initiated registration for the same dealership, the current user cannot resume or take over. They must either wait for that user to complete, or contact a registration specialist to cancel the existing application and start fresh.
+            </p>
+          </div>
+          <div className="grid grid-cols-3 gap-5">
+            {inProgressScenarios.map(s => (
+              <div key={s.id} className="bg-white rounded-xl border border-[#E8E9EB] p-6 flex flex-col">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-[#0E0E0F]">In Progress {s.num}</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#FFF7ED] text-[#C2410C]">Application In Progress</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-2">{s.title}</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">{s.desc}</p>
+                <PrimaryButton onClick={() => startScenario(s.scenario as ActiveScenario)} className="mt-5 w-full justify-center">
+                  Start →
+                </PrimaryButton>
               </div>
             ))}
           </div>

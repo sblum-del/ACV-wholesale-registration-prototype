@@ -5,9 +5,10 @@ interface Props {
   setView: (v: View) => void
   isLoggedIn?: boolean
   onLogout?: () => void
+  applicationCancelled?: boolean
 }
 
-export function InProgressOtherUser({ setView }: Props) {
+export function InProgressOtherUser({ setView, applicationCancelled }: Props) {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <ScreenLabel id="RESUME-1" name="In Progress — Started by Another User" />
@@ -34,20 +35,32 @@ export function InProgressOtherUser({ setView }: Props) {
         </p>
         <p className="text-sm text-[#55575C] mb-6">Please choose a dealership to continue</p>
 
-        {/* 5M card — matches existing style, "In progress" badge, Cancel button */}
-        <div className="border border-[#E8E9EB] rounded-xl px-5 py-4 flex items-center justify-between">
+        {applicationCancelled && (
+          <div className="bg-[#ECFDF5] border border-[#00A576] rounded-xl px-5 py-3 mb-4 flex items-center gap-3">
+            <span className="text-[#00A576] font-bold">✓</span>
+            <p className="text-sm text-[#065F46]">
+              The previous application has been cancelled by your registration specialist. You can now start fresh.
+            </p>
+          </div>
+        )}
+
+        {/* 5M card */}
+        <div className={`border rounded-xl px-5 py-4 flex items-center justify-between ${applicationCancelled ? 'border-[#E8E9EB]' : 'border-[#E8E9EB]'}`}>
           <div>
             <div className="flex items-center gap-2 mb-0.5">
               <span className="font-semibold text-[15px] text-[#0E0E0F]">Metro Ford of Albany</span>
-              <span className="bg-[#FFF7ED] text-[#C2410C] text-xs font-medium rounded px-2 py-0.5">In progress</span>
+              {applicationCancelled
+                ? <span className="bg-[#EBF5FF] text-[#0061A5] text-xs font-medium rounded px-2 py-0.5">Not started</span>
+                : <span className="bg-[#FFF7ED] text-[#C2410C] text-xs font-medium rounded px-2 py-0.5">In progress</span>
+              }
             </div>
             <span className="text-sm text-[#55575C]">Albany, Idaho</span>
           </div>
           <button
-            onClick={() => setView('cancel-in-progress')}
-            className="text-sm font-semibold text-[#DC2626] cursor-pointer hover:underline flex items-center gap-1 shrink-0 ml-4"
+            onClick={() => applicationCancelled ? setView('sf-interstitial-1') : setView('cancel-in-progress')}
+            className={`text-sm font-semibold cursor-pointer hover:underline flex items-center gap-1 shrink-0 ml-4 ${applicationCancelled ? 'text-[#004E7D]' : 'text-[#DC2626]'}`}
           >
-            Cancel <span className="text-base">›</span>
+            {applicationCancelled ? 'Start Registration →' : 'Cancel ›'}
           </button>
         </div>
       </div>
