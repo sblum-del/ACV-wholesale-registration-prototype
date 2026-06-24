@@ -1,4 +1,4 @@
-import type { View, DealerState, DocSignStatus } from '../../types'
+import type { View, DealerState, DocSignStatus, ActiveScenario } from '../../types'
 import { ACVHeader } from '../shared/ACVHeader'
 import { StepSidebar } from '../shared/StepSidebar'
 import { PrimaryButton } from '../shared/PrimaryButton'
@@ -12,13 +12,17 @@ interface Props {
   isLoggedIn?: boolean
   onLogout?: () => void
   postBanking?: boolean
+  activeScenario?: ActiveScenario
 }
 
 
-export function DocusignPrompt({ setView, dealerState, mobileNumber, docSignStatus, isLoggedIn, onLogout, postBanking }: Props) {
+export function DocusignPrompt({ setView, dealerState, mobileNumber, docSignStatus, isLoggedIn, onLogout, postBanking, activeScenario }: Props) {
   const needsTaxResale = dealerState !== 'oregon'
 
-  const nextView: View = postBanking ? 'qualifying-questions' : 'banking'
+  // s1b skips qualifying-questions screen (baked into dealership info) — go straight to demo
+  const nextView: View = postBanking
+    ? (activeScenario === 's1b' ? 'schedule-demo' : 'qualifying-questions')
+    : 'banking'
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -161,8 +165,8 @@ export function DocusignPrompt({ setView, dealerState, mobileNumber, docSignStat
               className="w-full text-center text-sm text-[#004E7D] border border-[#D1D3D6] rounded-full py-3 cursor-pointer hover:bg-[#F7F7F8] transition-colors"
             >
               {docSignStatus.lpoa === 'received'
-                ? `Continue to ${postBanking ? 'Schedule Demo' : 'Banking'} →`
-                : `Skip for now — go to ${postBanking ? 'Schedule Demo' : 'Banking'} →`}
+                ? `Continue to ${postBanking ? (activeScenario === 's1b' ? 'Schedule Demo' : 'Qualifying Questions') : 'Banking'} →`
+                : `Skip for now — go to ${postBanking ? (activeScenario === 's1b' ? 'Schedule Demo' : 'Qualifying Questions') : 'Banking'} →`}
             </button>
 
             {docSignStatus.lpoa !== 'received' && (

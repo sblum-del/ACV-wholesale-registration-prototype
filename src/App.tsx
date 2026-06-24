@@ -362,6 +362,7 @@ export default function App() {
           setDealerType={setDealerType}
           dealerGroupName={dealerGroupName}
           setDealerGroupName={setDealerGroupName}
+          activeScenario={activeScenario}
           {...sharedProps}
         />
       )}
@@ -477,6 +478,7 @@ export default function App() {
           mobileNumber={mobileNumber}
           docSignStatus={docSignStatus}
           postBanking
+          activeScenario={activeScenario}
           {...sharedProps}
         />
       )}
@@ -512,7 +514,7 @@ export default function App() {
           docSignStatus={docSignStatus}
           setDocSignStatus={setDocSignStatus}
           onLobby={() => setView('lobby')}
-          returnView="qualifying-questions"
+          returnView={activeScenario === 's1b' ? 'schedule-demo' : 'qualifying-questions'}
         />
       )}
 

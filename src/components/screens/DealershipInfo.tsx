@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { View } from '../../types'
+import type { View, ActiveScenario } from '../../types'
 import { ACVHeader } from '../shared/ACVHeader'
 import { StepSidebar } from '../shared/StepSidebar'
 import { MaterialField } from '../shared/MaterialField'
@@ -19,6 +19,14 @@ interface Props {
   setDealerGroupName: (s: string) => void
   isLoggedIn: boolean
   onLogout: () => void
+  activeScenario?: ActiveScenario
+}
+
+const PRODUCTS = ['Buy', 'Sell', 'Capital']
+const PRODUCT_DESC: Record<string, string> = {
+  Buy: 'Purchase wholesale vehicles from dealers nationwide',
+  Sell: 'List and sell vehicles to a network of verified dealers',
+  Capital: 'Access financing and capital solutions for your inventory',
 }
 
 const fields = [
@@ -29,14 +37,27 @@ const fields = [
   { label: 'Business Address', value: '1450 Central Ave, Albany, ID 83705' },
 ]
 
-export function DealershipInfo({ setView, mobileNumber, setMobileNumber, dealerGroup, setDealerGroup, dealerType, setDealerType, dealerGroupName, setDealerGroupName, isLoggedIn, onLogout }: Props) {
+export function DealershipInfo({ setView, mobileNumber, setMobileNumber, dealerGroup, setDealerGroup, dealerType, setDealerType, dealerGroupName, setDealerGroupName, isLoggedIn, onLogout, activeScenario }: Props) {
   const [smsOptIn, setSmsOptIn] = useState(false)
+  const isS1b = activeScenario === 's1b'
 
-  const canContinue =
+  // Qualifying questions state (s1b only — baked into this screen)
+  const [primaryContact, setPrimaryContact] = useState<'yes' | 'no' | null>(null)
+  const [billingContact, setBillingContact] = useState<'yes' | 'no' | null>(null)
+  const [hearAbout, setHearAbout] = useState('')
+  const [products, setProducts] = useState<string[]>([])
+  const toggleProduct = (p: string) =>
+    setProducts(prev => prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p])
+
+  const baseCanContinue =
     mobileNumber.length > 0 &&
     dealerType !== '' &&
     dealerGroup !== null &&
     (dealerGroup === 'no' || (dealerGroup === 'yes' && dealerGroupName.trim().length > 0))
+
+  const canContinue = isS1b
+    ? baseCanContinue && !!primaryContact && !!billingContact
+    : baseCanContinue
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -133,6 +154,84 @@ export function DealershipInfo({ setView, mobileNumber, setMobileNumber, dealerG
               </div>
             )}
           </div>
+
+          {/* Qualifying questions — s1b only, baked into this screen */}
+          {isS1b && (
+            <div className="mt-8 pt-8 border-t border-[#E8E9EB] space-y-6">
+              <div>
+                <h3 className="font-semibold text-base text-[#0E0E0F] mb-0.5">A few quick questions</h3>
+                <p className="text-sm text-[#55575C]">Help us tailor your ACV experience.</p>
+              </div>
+
+              {/* Primary Contact */}
+              <div>
+                <p className="text-sm font-medium text-[#0E0E0F] mb-2">
+                  Are you the Primary Contact? <span className="text-[#E53E3E]">*</span>
+                </p>
+                <div className="flex gap-3">
+                  <ChipToggle label="Yes" selected={primaryContact === 'yes'} onToggle={() => setPrimaryContact('yes')} />
+                  <ChipToggle label="No" selected={primaryContact === 'no'} onToggle={() => setPrimaryContact('no')} />
+                </div>
+              </div>
+
+              {/* Billing Contact */}
+              <div>
+                <p className="text-sm font-medium text-[#0E0E0F] mb-2">
+                  Is Primary Contact same as Billing Contact? <span className="text-[#E53E3E]">*</span>
+                </p>
+                <div className="flex gap-3">
+                  <ChipToggle label="Yes" selected={billingContact === 'yes'} onToggle={() => setBillingContact('yes')} />
+                  <ChipToggle label="No" selected={billingContact === 'no'} onToggle={() => setBillingContact('no')} />
+                </div>
+              </div>
+
+              {/* How did you hear */}
+              <div>
+                <p className="text-sm font-medium text-[#0E0E0F] mb-2">How did you hear about ACV?</p>
+                <select
+                  value={hearAbout}
+                  onChange={e => setHearAbout(e.target.value)}
+                  className="w-full border border-[#D1D3D6] rounded-lg px-3 py-2.5 text-sm text-[#0E0E0F] bg-[#FAFAFA] focus:outline-none focus:border-[#0077D8] cursor-pointer"
+                >
+                  <option value="">Select... (optional)</option>
+                  <option>Sales Rep</option>
+                  <option>Online Search</option>
+                  <option>Trade Show</option>
+                  <option>Word of Mouth</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              {/* Products */}
+              <div>
+                <p className="text-sm font-medium text-[#0E0E0F] mb-1">Which ACV products are you interested in?</p>
+                <p className="text-xs text-[#8D9199] mb-3">Select all that apply (optional)</p>
+                <div className="space-y-2">
+                  {PRODUCTS.map(p => {
+                    const selected = products.includes(p)
+                    return (
+                      <label
+                        key={p}
+                        className={`flex items-center gap-3 border rounded-xl px-4 py-3 cursor-pointer transition-all
+                          ${selected ? 'border-[#F26522] bg-[#FFF3ED]' : 'border-[#E8E9EB] bg-white hover:border-[#D1D3D6]'}`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selected}
+                          onChange={() => toggleProduct(p)}
+                          className="w-4 h-4 accent-[#F26522] cursor-pointer shrink-0"
+                        />
+                        <div className="flex-1">
+                          <span className={`text-sm font-semibold ${selected ? 'text-[#F26522]' : 'text-[#0E0E0F]'}`}>{p}</span>
+                          <span className="text-xs text-[#55575C] ml-2">{PRODUCT_DESC[p]}</span>
+                        </div>
+                      </label>
+                    )
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="flex justify-end gap-6 items-center mt-8">
             <button onClick={() => setView('select-dealership')} className="text-[#004E7D] text-sm font-medium cursor-pointer hover:underline">
