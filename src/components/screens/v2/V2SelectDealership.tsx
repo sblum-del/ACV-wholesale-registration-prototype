@@ -1,7 +1,5 @@
-import { useState } from 'react'
 import type { View } from '../../../types'
 import { ACVHeader } from '../../shared/ACVHeader'
-import { PrimaryButton } from '../../shared/PrimaryButton'
 import { ScreenLabel } from '../../shared/ScreenLabel'
 
 interface Props {
@@ -22,8 +20,6 @@ const DEALER = {
 }
 
 export function V2SelectDealership({ setView, isLoggedIn, onLogout }: Props) {
-  const [, setSelectedId] = useState<string>(DEALER.id)
-
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <ScreenLabel id="V2-1" name="Select Dealership" />
@@ -50,7 +46,7 @@ export function V2SelectDealership({ setView, isLoggedIn, onLogout }: Props) {
             </div>
           </div>
           <button
-            onClick={() => { setSelectedId(DEALER.id); setView('v2-sf-interstitial-1') }}
+            onClick={() => setView('v2-sf-interstitial-1')}
             className="text-sm font-semibold text-[#004E7D] cursor-pointer hover:underline"
           >
             Start Registration →
