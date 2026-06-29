@@ -57,6 +57,8 @@ export type View =
   | 'v2-dealership-info'
   | 'v2-sf-interstitial-dealership'
   | 'v2-terms-of-service'
+  | 'v2-banking'
+  | 'v2-ach-form'
 
 export interface Dealership5M {
   id: string

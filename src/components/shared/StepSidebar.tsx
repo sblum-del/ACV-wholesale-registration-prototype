@@ -12,7 +12,7 @@ interface Props {
 // Step order: Dealership Info → ToS → Bank Account → LPOA → Tax Resale
 // activeStep: 0=DealerInfo, 1=ToS, 2=BankAccount, 3=LPOA, 4=TaxResale
 
-export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolution, showTimeEstimate = true, lpoaFullName = false }: Props) {
+export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolution, showTimeEstimate = false, lpoaFullName = false }: Props) {
   const baseSteps = [
     { label: 'Dealership Information', key: 'dealership' },
     { label: 'Terms of Service', key: 'tos' },

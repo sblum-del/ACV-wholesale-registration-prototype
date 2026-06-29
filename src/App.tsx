@@ -52,6 +52,8 @@ import { V2CreateCredentials } from './components/screens/v2/V2CreateCredentials
 import { V2SelectDealership } from './components/screens/v2/V2SelectDealership'
 import { V2DealershipInfo } from './components/screens/v2/V2DealershipInfo'
 import { V2TermsOfService } from './components/screens/v2/V2TermsOfService'
+import { V2Banking } from './components/screens/v2/V2Banking'
+import { V2ACHForm } from './components/screens/v2/V2ACHForm'
 
 export default function App() {
   const [view, setView] = useState<View>('lobby')
@@ -400,8 +402,8 @@ export default function App() {
             'ToS Status on Application → Verified',
             'NOTE: DocuSign was already sent at application creation — this does not re-trigger DocuSign',
           ]}
-          onViewSF={() => goToSF('banking')}
-          onContinue={() => setView('banking')}
+          onViewSF={() => goToSF(activeScenario === 'v2-base' ? 'v2-banking' : 'banking')}
+          onContinue={() => setView(activeScenario === 'v2-base' ? 'v2-banking' : 'banking')}
         />
       )}
 
@@ -518,7 +520,7 @@ export default function App() {
           docSignStatus={docSignStatus}
           setDocSignStatus={setDocSignStatus}
           onLobby={() => setView('lobby')}
-          returnView={activeScenario === 's1b' ? 'schedule-demo' : 'qualifying-questions'}
+          returnView={(activeScenario === 's1b' || activeScenario === 'v2-base') ? 'schedule-demo' : 'qualifying-questions'}
         />
       )}
 
@@ -685,6 +687,24 @@ export default function App() {
           setView={setView}
           tosScrolled={tosScrolled}
           setTosScrolled={setTosScrolled}
+          {...sharedProps}
+        />
+      )}
+
+      {view === 'v2-banking' && (
+        <V2Banking
+          setView={setView}
+          setPrimaryBankSelected={setPrimaryBankSelected}
+          docSignStatus={docSignStatus}
+          {...sharedProps}
+        />
+      )}
+
+      {view === 'v2-ach-form' && (
+        <V2ACHForm
+          setView={setView}
+          setPrimaryBankSelected={setPrimaryBankSelected}
+          docSignStatus={docSignStatus}
           {...sharedProps}
         />
       )}

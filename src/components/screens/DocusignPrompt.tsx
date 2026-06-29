@@ -19,9 +19,9 @@ interface Props {
 export function DocusignPrompt({ setView, dealerState, mobileNumber, docSignStatus, isLoggedIn, onLogout, postBanking, activeScenario }: Props) {
   const needsTaxResale = dealerState !== 'oregon'
 
-  // s1b skips qualifying-questions screen (baked into dealership info) — go straight to demo
+  const skipQualifyingQuestions = activeScenario === 's1b' || activeScenario === 'v2-base'
   const nextView: View = postBanking
-    ? (activeScenario === 's1b' ? 'schedule-demo' : 'qualifying-questions')
+    ? (skipQualifyingQuestions ? 'schedule-demo' : 'qualifying-questions')
     : 'banking'
 
   return (
@@ -165,8 +165,8 @@ export function DocusignPrompt({ setView, dealerState, mobileNumber, docSignStat
               className="w-full text-center text-sm text-[#004E7D] border border-[#D1D3D6] rounded-full py-3 cursor-pointer hover:bg-[#F7F7F8] transition-colors"
             >
               {docSignStatus.lpoa === 'received'
-                ? `Continue to ${postBanking ? (activeScenario === 's1b' ? 'Schedule Demo' : 'Qualifying Questions') : 'Banking'} →`
-                : `Skip for now — go to ${postBanking ? (activeScenario === 's1b' ? 'Schedule Demo' : 'Qualifying Questions') : 'Banking'} →`}
+                ? `Continue to ${postBanking ? (skipQualifyingQuestions ? 'Schedule Demo' : 'Qualifying Questions') : 'Banking'} →`
+                : `Skip for now — go to ${postBanking ? (skipQualifyingQuestions ? 'Schedule Demo' : 'Qualifying Questions') : 'Banking'} →`}
             </button>
 
             {docSignStatus.lpoa !== 'received' && (

@@ -7,6 +7,19 @@ interface Props {
   onLobby?: () => void
 }
 
+function maskEmail(email: string): string {
+  const atIdx = email.indexOf('@')
+  if (atIdx < 0) return email
+  const local = email.slice(0, atIdx)
+  const rest = email.slice(atIdx + 1)
+  const dotIdx = rest.lastIndexOf('.')
+  const host = dotIdx > 0 ? rest.slice(0, dotIdx) : rest
+  const tld = dotIdx > 0 ? rest.slice(dotIdx) : ''
+  const maskedLocal = local.length <= 2 ? local[0] + '***' : local.slice(0, 2) + '*'.repeat(local.length - 2)
+  const maskedHost = host.length <= 2 ? host[0] + '***' : host.slice(0, 2) + '*'.repeat(host.length - 2)
+  return `${maskedLocal}@${maskedHost}${tld}`
+}
+
 export function CheckEmailMFA({ setView, onLobby }: Props) {
   return (
     <div className="min-h-screen bg-[#F5F5F7] flex flex-col">
@@ -19,7 +32,7 @@ export function CheckEmailMFA({ setView, onLobby }: Props) {
           </div>
           <h2 className="font-bold text-2xl text-[#0E0E0F]">Check your email</h2>
           <p className="text-sm text-[#55575C] mt-3">We sent a confirmation code to:</p>
-          <p className="font-semibold text-[#0E0E0F] mt-1">jharlow@metrofordalbany.com</p>
+          <p className="font-semibold text-[#0E0E0F] mt-1">{maskEmail('jharlow@metrofordalbany.com')}</p>
           <p className="text-sm text-[#55575C] mt-3">
             Enter the 6-digit code from that email on the next screen.
           </p>
