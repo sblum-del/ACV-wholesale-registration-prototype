@@ -129,13 +129,14 @@ function WIPTab({ setView }: { setView: (v: View) => void }) {
 
 // ── MAIN LOBBY ───────────────────────────────────────────────────
 export function Lobby({ setView, startScenario }: Props) {
-  const [activeTab, setActiveTab] = useState<'exec' | 'prototype' | 'feedback' | 'wip'>('exec')
+  const [activeTab, setActiveTab] = useState<'exec' | 'prototype' | 'feedback' | 'wip' | 'updated'>('exec')
 
   const tabs = [
     { id: 'exec',      label: 'Executive Summary' },
     { id: 'prototype', label: 'Interactive Prototype' },
     { id: 'feedback',  label: 'Stakeholder Feedback' },
     { id: 'wip',       label: '🔒 Product WIP' },
+    { id: 'updated',   label: 'Updated Prototypes' },
   ] as const
 
   return (
@@ -289,6 +290,40 @@ export function Lobby({ setView, startScenario }: Props) {
 
       {/* ── WIP TAB ── */}
       {activeTab === 'wip' && <WIPTab setView={setView} />}
+
+      {/* ── UPDATED PROTOTYPES TAB ── */}
+      {activeTab === 'updated' && (
+        <div className="px-10 pt-8 pb-16">
+          <h2 className="font-bold text-2xl text-[#0E0E0F] mb-1">Updated Prototypes</h2>
+          <p className="text-sm text-[#55575C] mb-2 max-w-3xl">
+            Revised flows incorporating product and legal updates. These run in parallel with the original scenarios — use them to review and validate changes before they replace the originals.
+          </p>
+          <div className="bg-[#EFF6FF] border border-[#BFD9F7] rounded-xl px-5 py-3 mb-8 max-w-3xl">
+            <p className="text-sm text-[#004E7D]">
+              <span className="font-semibold">What's updated:</span> Progress bar simplified · 5M ID on dealership selection · Editable email on credential creation · Consolidated dealership info screen with expanded contact collection · ToS streamlined to checkbox-only acceptance · "Limited Power of Attorney" used throughout.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-5">
+            <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0077D8] p-6 flex flex-col hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold text-[#0E0E0F]">Base Scenario</span>
+                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#EFF6FF] text-[#0061A5]">Standard Registration</span>
+              </div>
+              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
+                Net-New User · Single Dealership · Single Verified Bank Account
+              </p>
+              <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
+              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                Clean happy-path registration with all V2 updates applied. Same core flow as Scenario 1.1, reflecting the latest product and legal decisions.
+              </p>
+              <PrimaryButton onClick={() => startScenario('v2-base')} className="mt-5 w-full justify-center">
+                Start →
+              </PrimaryButton>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -51,6 +51,12 @@ export type View =
   | 'sf-interstitial-4'
   | 'salesforce-view'
   | 'success'
+  | 'v2-create-credentials'
+  | 'v2-select-dealership'
+  | 'v2-sf-interstitial-1'
+  | 'v2-dealership-info'
+  | 'v2-sf-interstitial-dealership'
+  | 'v2-terms-of-service'
 
 export interface Dealership5M {
   id: string
@@ -63,7 +69,7 @@ export interface Dealership5M {
 }
 
 export type DealerState = 'idaho' | 'alabama' | 'oregon'
-export type ActiveScenario = 's1' | 's1b' | 's2' | 's3' | 's4' | 's5' | 's6' | 's7' | 's8' | 's8b' | 's9' | 's10' | 's11' | 'r1' | 'r2' | 'r3' | 'r4' | 'r5' | 'r6' | 'r6n'
+export type ActiveScenario = 's1' | 's1b' | 's2' | 's3' | 's4' | 's5' | 's6' | 's7' | 's8' | 's8b' | 's9' | 's10' | 's11' | 'r1' | 'r2' | 'r3' | 'r4' | 'r5' | 'r6' | 'r6n' | 'v2-base'
 
 export interface DocSignStatus {
   lpoa: 'pending' | 'received'

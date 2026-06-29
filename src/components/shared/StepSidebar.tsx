@@ -5,17 +5,19 @@ interface Props {
   docSignStatus?: DocSignStatus
   showTaxResale?: boolean
   bankingPendingResolution?: boolean
+  showTimeEstimate?: boolean
+  lpoaFullName?: boolean
 }
 
 // Step order: Dealership Info → ToS → Bank Account → LPOA → Tax Resale
 // activeStep: 0=DealerInfo, 1=ToS, 2=BankAccount, 3=LPOA, 4=TaxResale
 
-export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolution }: Props) {
+export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolution, showTimeEstimate = true, lpoaFullName = false }: Props) {
   const baseSteps = [
     { label: 'Dealership Information', key: 'dealership' },
     { label: 'Terms of Service', key: 'tos' },
     { label: 'Bank Account', key: 'bank' },
-    { label: 'LPOA', key: 'lpoa' },
+    { label: lpoaFullName ? 'Limited Power of Attorney' : 'LPOA', key: 'lpoa' },
   ]
 
   // Always show Tax Resale step — Oregon shows it with "Not Required" label
@@ -44,7 +46,7 @@ export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolutio
 
   return (
     <div className="w-64 shrink-0 pt-4">
-      <p className="text-sm text-[#0077D8] mb-8 px-5">Approx. 10 min total</p>
+      {showTimeEstimate && <p className="text-sm text-[#0077D8] mb-8 px-5">Approx. 10 min total</p>}
       <div className="flex flex-col">
         {steps.map((step, i) => {
           const status = getStepStatus(i, step.key)

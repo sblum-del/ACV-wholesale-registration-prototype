@@ -48,6 +48,10 @@ import { QualifyingQuestions } from './components/screens/QualifyingQuestions'
 import { ScheduleDemo } from './components/screens/ScheduleDemo'
 import { SalesforceView } from './components/screens/SalesforceView'
 import { Success } from './components/screens/Success'
+import { V2CreateCredentials } from './components/screens/v2/V2CreateCredentials'
+import { V2SelectDealership } from './components/screens/v2/V2SelectDealership'
+import { V2DealershipInfo } from './components/screens/v2/V2DealershipInfo'
+import { V2TermsOfService } from './components/screens/v2/V2TermsOfService'
 
 export default function App() {
   const [view, setView] = useState<View>('lobby')
@@ -584,6 +588,107 @@ export default function App() {
       )}
       {view === 'dg-success' && (
         <DGSuccess setView={setView} selectedRooftops={selectedRooftops} dgSituation={dgSituation} />
+      )}
+
+      {/* ── V2 UPDATED PROTOTYPE FLOW ── */}
+      {view === 'v2-create-credentials' && (
+        <V2CreateCredentials setView={setView} onLobby={() => setView('lobby')} />
+      )}
+
+      {view === 'v2-select-dealership' && (
+        <V2SelectDealership setView={setView} {...sharedProps} />
+      )}
+
+      {view === 'v2-sf-interstitial-1' && (
+        <SFInterstitial
+          trigger="Triggered: User clicked 'Start Registration' — Application record created"
+          sections={[
+            {
+              heading: 'In Salesforce',
+              bullets: [
+                'Contact record created — James Harlow',
+                'Account record created — Metro Ford of Albany',
+                'Associated Location Billing Address created at the same time as the Account record',
+                'Affiliation record created (Contact ↔ Account)',
+                'Application record created',
+              ],
+              subBullets: {
+                1: [
+                  'Account Owner (TM): Patty Vadella — pre-defined territory/region logic',
+                  'IST Account Rep: Mike Ziewicki — pre-defined territory/region logic',
+                  'Inactive Reason set to: Never Activated',
+                ],
+                3: [
+                  'Application Owner: Rob Smyton (round-robin assignment)',
+                ],
+              },
+            },
+            {
+              heading: 'DocuSign — Triggered on Application Creation',
+              bullets: [
+                'Limited Power of Attorney DocuSign envelope triggered automatically by Salesforce<>DocuSign integration',
+                'Idaho Form ST-101 Tax Resale Cert also included in DocuSign envelope',
+                'DocuSign emails sent to jharlow@metrofordalbany.com',
+              ],
+            },
+            {
+              heading: 'AuctionAccess API Call',
+              bullets: [
+                'Registration call sent to AuctionAccess — Metro Ford of Albany now an official ACV account',
+                'Account granted read-only marketplace access (no buy/sell permissions yet)',
+                'ACV begins consuming AA data and events for this dealership',
+              ],
+            },
+            {
+              heading: 'NetSuite & JPMorgan (Banking)',
+              bullets: [
+                'NetSuite account record created for Metro Ford of Albany',
+                'NetSuite calls AuctionAccess — pulls all open bank accounts on file → creates bank account records in NetSuite',
+                'Bank account records run through JPMorgan validation',
+                'JPMorgan results attached to NetSuite bank account records',
+                'Results returned to customer-facing UX — no banking data passes through Salesforce',
+              ],
+            },
+          ]}
+          onViewSF={() => goToSF('v2-dealership-info')}
+          onContinue={() => setView('v2-dealership-info')}
+        />
+      )}
+
+      {view === 'v2-dealership-info' && (
+        <V2DealershipInfo
+          setView={setView}
+          mobileNumber={mobileNumber}
+          setMobileNumber={setMobileNumber}
+          dealerGroup={dealerGroup}
+          setDealerGroup={setDealerGroup}
+          dealerType={dealerType}
+          setDealerType={setDealerType}
+          dealerGroupName={dealerGroupName}
+          setDealerGroupName={setDealerGroupName}
+          {...sharedProps}
+        />
+      )}
+
+      {view === 'v2-sf-interstitial-dealership' && (
+        <SFInterstitialDealership
+          setView={setView}
+          mobileNumber={mobileNumber}
+          dealerGroup={dealerGroup}
+          dealerGroupName={dealerGroupName}
+          dealerType={dealerType}
+          nextView="v2-terms-of-service"
+          onViewSF={() => { setSfReturnView('v2-terms-of-service'); setView('salesforce-view') }}
+        />
+      )}
+
+      {view === 'v2-terms-of-service' && (
+        <V2TermsOfService
+          setView={setView}
+          tosScrolled={tosScrolled}
+          setTosScrolled={setTosScrolled}
+          {...sharedProps}
+        />
       )}
     </div>
   )

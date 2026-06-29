@@ -8,9 +8,10 @@ interface Props {
   dealerGroupName: string
   dealerType: string
   onViewSF: () => void
+  nextView?: View
 }
 
-export function SFInterstitialDealership({ setView, mobileNumber, dealerGroup, dealerGroupName, dealerType, onViewSF }: Props) {
+export function SFInterstitialDealership({ setView, mobileNumber, dealerGroup, dealerGroupName, dealerType, onViewSF, nextView = 'terms-of-service' }: Props) {
   const isDealerGroup = dealerGroup === 'yes'
 
   return (
@@ -135,7 +136,7 @@ export function SFInterstitialDealership({ setView, mobileNumber, dealerGroup, d
             See Salesforce record →
           </button>
           <button
-            onClick={() => setView('terms-of-service')}
+            onClick={() => setView(nextView)}
             className="border border-[#D1D3D6] text-[#55575C] rounded-lg px-5 py-2.5 text-sm cursor-pointer hover:bg-[#F7F7F8] transition-colors"
           >
             Continue to Terms of Service
