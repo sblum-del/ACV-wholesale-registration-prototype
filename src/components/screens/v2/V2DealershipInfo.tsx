@@ -11,8 +11,6 @@ interface Props {
   setView: (v: View) => void
   mobileNumber: string
   setMobileNumber: (s: string) => void
-  dealerGroup: 'yes' | 'no' | null
-  setDealerGroup: (v: 'yes' | 'no' | null) => void
   dealerType: string
   setDealerType: (s: string) => void
   dealerGroupName: string
@@ -36,7 +34,7 @@ const fields = [
   { label: 'Business Address', value: '1450 Central Ave, Albany, ID 83705' },
 ]
 
-export function V2DealershipInfo({ setView, mobileNumber, setMobileNumber, dealerGroup, setDealerGroup, dealerType, setDealerType, dealerGroupName, setDealerGroupName, isLoggedIn, onLogout }: Props) {
+export function V2DealershipInfo({ setView, mobileNumber, setMobileNumber, dealerType, setDealerType, dealerGroupName, setDealerGroupName, isLoggedIn, onLogout }: Props) {
   const [smsOptIn, setSmsOptIn] = useState(false)
 
   const [primaryContact, setPrimaryContact] = useState<'yes' | 'no' | null>(null)
@@ -66,8 +64,6 @@ export function V2DealershipInfo({ setView, mobileNumber, setMobileNumber, deale
   const canContinue =
     mobileNumber.length > 0 &&
     dealerType !== '' &&
-    dealerGroup !== null &&
-    (dealerGroup === 'no' || dealerGroupName.trim().length > 0) &&
     primaryContact !== null &&
     primaryContactDetailsValid &&
     billingContact !== null &&
@@ -140,29 +136,18 @@ export function V2DealershipInfo({ setView, mobileNumber, setMobileNumber, deale
 
           {/* Dealer Group */}
           <div className="mt-6">
-            <div className="flex items-center gap-1 mb-3">
-              <p className="text-sm text-[#0E0E0F]">Is this rooftop part of a Dealer Group?</p>
-              <span className="text-[#E53E3E] text-sm">*</span>
+            <div className="flex items-center gap-1 mb-1">
+              <p className="text-sm text-[#0E0E0F]">Dealer Group Name</p>
+              <span className="text-xs text-[#8D9199] ml-1">(optional)</span>
             </div>
-            <div className="flex gap-4">
-              <ChipToggle label="Yes" selected={dealerGroup === 'yes'} onToggle={() => setDealerGroup('yes')} />
-              <ChipToggle label="No" selected={dealerGroup === 'no'} onToggle={() => { setDealerGroup('no'); setDealerGroupName('') }} />
-            </div>
-            {dealerGroup === 'yes' && (
-              <div className="mt-4">
-                <div className="flex items-center gap-1 mb-1">
-                  <span className="text-sm text-[#0E0E0F]">Dealer Group Name</span>
-                  <span className="text-[#E53E3E] text-sm">*</span>
-                </div>
-                <input
-                  type="text"
-                  value={dealerGroupName}
-                  onChange={e => setDealerGroupName(e.target.value)}
-                  placeholder="e.g. Group One Automotive"
-                  className="w-full border border-[#D1D3D6] rounded-lg px-3 py-2.5 text-sm text-[#0E0E0F] bg-[#FAFAFA] focus:outline-none focus:border-[#0077D8] mt-1"
-                />
-              </div>
-            )}
+            <p className="text-xs text-[#8D9199] mb-2">If this rooftop is part of a dealer group, enter the name here.</p>
+            <input
+              type="text"
+              value={dealerGroupName}
+              onChange={e => setDealerGroupName(e.target.value)}
+              placeholder="e.g. Group One Automotive"
+              className="w-full border border-[#D1D3D6] rounded-lg px-3 py-2.5 text-sm text-[#0E0E0F] bg-[#FAFAFA] focus:outline-none focus:border-[#0077D8]"
+            />
           </div>
 
           {/* ── Contact & Billing Questions ── */}

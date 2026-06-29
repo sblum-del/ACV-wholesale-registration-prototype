@@ -660,8 +660,6 @@ export default function App() {
           setView={setView}
           mobileNumber={mobileNumber}
           setMobileNumber={setMobileNumber}
-          dealerGroup={dealerGroup}
-          setDealerGroup={setDealerGroup}
           dealerType={dealerType}
           setDealerType={setDealerType}
           dealerGroupName={dealerGroupName}
