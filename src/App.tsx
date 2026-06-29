@@ -55,6 +55,7 @@ import { V2TermsOfService } from './components/screens/v2/V2TermsOfService'
 import { V2Banking } from './components/screens/v2/V2Banking'
 import { V2ACHForm } from './components/screens/v2/V2ACHForm'
 import { V2DocuSign } from './components/screens/v2/V2DocuSign'
+import { V2ThankYou } from './components/screens/v2/V2ThankYou'
 
 export default function App() {
   const [view, setView] = useState<View>('lobby')
@@ -714,6 +715,13 @@ export default function App() {
         <V2DocuSign
           setView={setView}
           docSignStatus={docSignStatus}
+          {...sharedProps}
+        />
+      )}
+
+      {view === 'v2-thank-you' && (
+        <V2ThankYou
+          setView={setView}
           {...sharedProps}
         />
       )}

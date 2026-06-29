@@ -11,6 +11,19 @@ interface Props {
   activeScenario?: ActiveScenario
 }
 
+function maskEmail(email: string): string {
+  const atIdx = email.indexOf('@')
+  if (atIdx < 0) return email
+  const local = email.slice(0, atIdx)
+  const rest = email.slice(atIdx + 1)
+  const dotIdx = rest.lastIndexOf('.')
+  const host = dotIdx > 0 ? rest.slice(0, dotIdx) : rest
+  const tld = dotIdx > 0 ? rest.slice(dotIdx) : ''
+  const maskedLocal = local.length <= 2 ? local[0] + '***' : local.slice(0, 2) + '*'.repeat(local.length - 2)
+  const maskedHost = host.length <= 2 ? host[0] + '***' : host.slice(0, 2) + '*'.repeat(host.length - 2)
+  return `${maskedLocal}@${maskedHost}${tld}`
+}
+
 export function MFACodeEntry({ setView, setLoggedIn, onLobby, activeScenario }: Props) {
   const [code, setCode] = useState('')
   const [error, setError] = useState(false)
@@ -58,7 +71,7 @@ export function MFACodeEntry({ setView, setLoggedIn, onLobby, activeScenario }: 
               <p className="text-sm text-[#55575C] mt-3">
                 We sent a 6-digit confirmation code to:
               </p>
-              <p className="font-semibold text-[#0E0E0F] mt-1">jharlow@metrofordalbany.com</p>
+              <p className="font-semibold text-[#0E0E0F] mt-1">{maskEmail('jharlow@metrofordalbany.com')}</p>
               <p className="text-sm text-[#55575C] mt-1">Enter the code below to continue.</p>
 
               {/* Code input */}

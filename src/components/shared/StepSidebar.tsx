@@ -82,16 +82,7 @@ export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolutio
                   {step.key === 'bank' && status === 'pending-resolution' && (
                     <p className="text-[10px] mt-0.5 text-[#F59600]">Pending Resolution</p>
                   )}
-                  {/* Show SF status for DocSign steps */}
-                  {step.key === 'lpoa-tax' && docSignStatus && (
-                    <p className={`text-[10px] mt-0.5 ${
-                      docSignStatus.lpoa === 'received' && docSignStatus.taxResale === 'received' ? 'text-[#00A576]' : 'text-[#8D9199]'
-                    }`}>
-                      {docSignStatus.lpoa === 'received' && docSignStatus.taxResale === 'received'
-                        ? 'Both received in Salesforce'
-                        : 'Pending in Salesforce'}
-                    </p>
-                  )}
+                  {/* Show SF status for non-combined DocSign steps */}
                   {step.key === 'lpoa' && docSignStatus && (
                     <p className={`text-[10px] mt-0.5 ${docSignStatus.lpoa === 'received' ? 'text-[#00A576]' : 'text-[#8D9199]'}`}>
                       {docSignStatus.lpoa === 'received' ? 'Received in Salesforce' : 'Pending in Salesforce'}

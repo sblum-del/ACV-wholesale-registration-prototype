@@ -60,6 +60,7 @@ export type View =
   | 'v2-banking'
   | 'v2-ach-form'
   | 'v2-docusign'
+  | 'v2-thank-you'
 
 export interface Dealership5M {
   id: string
