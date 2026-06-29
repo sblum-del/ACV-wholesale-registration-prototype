@@ -54,6 +54,7 @@ import { V2DealershipInfo } from './components/screens/v2/V2DealershipInfo'
 import { V2TermsOfService } from './components/screens/v2/V2TermsOfService'
 import { V2Banking } from './components/screens/v2/V2Banking'
 import { V2ACHForm } from './components/screens/v2/V2ACHForm'
+import { V2DocuSign } from './components/screens/v2/V2DocuSign'
 
 export default function App() {
   const [view, setView] = useState<View>('lobby')
@@ -471,8 +472,8 @@ export default function App() {
             'NetSuite: Chase Bank ••••4821 marked as primary for Metro Ford of Albany',
             'Application resume checkpoint updated — banking step complete',
           ]}
-          onViewSF={() => goToSF('docusign-prompt-post-banking')}
-          onContinue={() => setView('docusign-prompt-post-banking')}
+          onViewSF={() => goToSF(activeScenario === 'v2-base' ? 'v2-docusign' : 'docusign-prompt-post-banking')}
+          onContinue={() => setView(activeScenario === 'v2-base' ? 'v2-docusign' : 'docusign-prompt-post-banking')}
         />
       )}
 
@@ -704,6 +705,14 @@ export default function App() {
         <V2ACHForm
           setView={setView}
           setPrimaryBankSelected={setPrimaryBankSelected}
+          docSignStatus={docSignStatus}
+          {...sharedProps}
+        />
+      )}
+
+      {view === 'v2-docusign' && (
+        <V2DocuSign
+          setView={setView}
           docSignStatus={docSignStatus}
           {...sharedProps}
         />

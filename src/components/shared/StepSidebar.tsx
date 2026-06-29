@@ -7,23 +7,36 @@ interface Props {
   bankingPendingResolution?: boolean
   showTimeEstimate?: boolean
   lpoaFullName?: boolean
+  combineLpoaAndTax?: boolean
 }
 
-// Step order: Dealership Info → ToS → Bank Account → LPOA → Tax Resale
-// activeStep: 0=DealerInfo, 1=ToS, 2=BankAccount, 3=LPOA, 4=TaxResale
+// Step order (standard): Dealership Info → ToS → Bank Account → LPOA → Tax Resale
+// Step order (combined):  Dealership Info → ToS → Bank Account → LPOA & Tax Resale
+// activeStep: 0=DealerInfo, 1=ToS, 2=BankAccount, 3=LPOA (or combined), 4=TaxResale (standard only)
 
-export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolution, showTimeEstimate = false, lpoaFullName = false }: Props) {
-  const baseSteps = [
-    { label: 'Dealership Information', key: 'dealership' },
-    { label: 'Terms of Service', key: 'tos' },
-    { label: 'Bank Account', key: 'bank' },
-    { label: lpoaFullName ? 'Limited Power of Attorney' : 'LPOA', key: 'lpoa' },
-  ]
-
-  // Always show Tax Resale step — Oregon shows it with "Not Required" label
-  const steps = [...baseSteps, { label: 'TAX Resale', key: 'tax' }]
+export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolution, showTimeEstimate = false, lpoaFullName = false, combineLpoaAndTax = false }: Props) {
+  const steps = combineLpoaAndTax
+    ? [
+        { label: 'Dealership Information', key: 'dealership' },
+        { label: 'Terms of Service', key: 'tos' },
+        { label: 'Bank Account', key: 'bank' },
+        { label: lpoaFullName ? 'Limited Power of Attorney & Tax Resale' : 'LPOA & Tax Resale', key: 'lpoa-tax' },
+      ]
+    : [
+        { label: 'Dealership Information', key: 'dealership' },
+        { label: 'Terms of Service', key: 'tos' },
+        { label: 'Bank Account', key: 'bank' },
+        { label: lpoaFullName ? 'Limited Power of Attorney' : 'LPOA', key: 'lpoa' },
+        { label: 'TAX Resale', key: 'tax' },
+      ]
 
   const getStepStatus = (index: number, key: string) => {
+    if (key === 'lpoa-tax' && docSignStatus) {
+      if (docSignStatus.lpoa === 'received' && docSignStatus.taxResale === 'received') return 'done'
+      if (index < activeStep) return 'done'
+      if (index === activeStep) return 'active'
+      return 'inactive'
+    }
     // DocSign steps use SF status (received) not customer completion
     if (key === 'lpoa' && docSignStatus) {
       if (docSignStatus.lpoa === 'received') return 'done'
@@ -70,6 +83,15 @@ export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolutio
                     <p className="text-[10px] mt-0.5 text-[#F59600]">Pending Resolution</p>
                   )}
                   {/* Show SF status for DocSign steps */}
+                  {step.key === 'lpoa-tax' && docSignStatus && (
+                    <p className={`text-[10px] mt-0.5 ${
+                      docSignStatus.lpoa === 'received' && docSignStatus.taxResale === 'received' ? 'text-[#00A576]' : 'text-[#8D9199]'
+                    }`}>
+                      {docSignStatus.lpoa === 'received' && docSignStatus.taxResale === 'received'
+                        ? 'Both received in Salesforce'
+                        : 'Pending in Salesforce'}
+                    </p>
+                  )}
                   {step.key === 'lpoa' && docSignStatus && (
                     <p className={`text-[10px] mt-0.5 ${docSignStatus.lpoa === 'received' ? 'text-[#00A576]' : 'text-[#8D9199]'}`}>
                       {docSignStatus.lpoa === 'received' ? 'Received in Salesforce' : 'Pending in Salesforce'}

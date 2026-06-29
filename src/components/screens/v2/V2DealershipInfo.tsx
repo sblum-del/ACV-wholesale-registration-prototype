@@ -74,7 +74,7 @@ export function V2DealershipInfo({ setView, mobileNumber, setMobileNumber, deale
       <ScreenLabel id="V2-3" name="Dealership Information" />
       <ACVHeader registering onLobby={() => setView('lobby')} isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <div className="flex gap-0 px-10 pt-8 pb-12">
-        <StepSidebar activeStep={0} showTaxResale={true} showTimeEstimate={false} lpoaFullName={true} />
+        <StepSidebar activeStep={0} showTimeEstimate={false} lpoaFullName={true} combineLpoaAndTax={true} />
         <div className="flex-1 max-w-2xl ml-20">
           <h2 className="font-bold text-2xl text-[#0E0E0F] mb-1">Dealership Information</h2>
           <p className="text-sm text-[#55575C] mb-4">Account Info Auto-filled from AuctionAccess</p>

@@ -59,6 +59,7 @@ export type View =
   | 'v2-terms-of-service'
   | 'v2-banking'
   | 'v2-ach-form'
+  | 'v2-docusign'
 
 export interface Dealership5M {
   id: string

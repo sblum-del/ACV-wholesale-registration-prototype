@@ -30,7 +30,7 @@ export function V2Banking({ setView, setPrimaryBankSelected, docSignStatus, isLo
       <ScreenLabel id="V2-5" name="Bank Account" />
       <ACVHeader registering onLobby={() => setView('lobby')} isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <div className="flex gap-0 px-10 pt-8 pb-12">
-        <StepSidebar activeStep={2} docSignStatus={docSignStatus} showTimeEstimate={false} lpoaFullName={true} />
+        <StepSidebar activeStep={2} docSignStatus={docSignStatus} showTimeEstimate={false} lpoaFullName={true} combineLpoaAndTax={true} />
 
         <div className="flex-1 max-w-2xl ml-20">
           <h2 className="font-bold text-2xl text-[#0E0E0F] mb-1">Bank Account</h2>
