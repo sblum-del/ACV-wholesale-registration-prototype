@@ -24,6 +24,11 @@ interface Account {
 }
 
 const SCENARIO_ACCOUNTS: Partial<Record<ActiveScenario, Account[]>> = {
+  'v2-banking-many': [
+    { id: 'ba-1', bank: 'Bank of America', type: 'Checking', last4: '5678', routing: '021000021', status: 'open' },
+    { id: 'ba-2', bank: 'Chase Bank', type: 'Checking', last4: '4821', routing: '021000089', status: 'open' },
+    { id: 'ba-3', bank: 'Regions Bank', type: 'Savings', last4: '3344', routing: '063100277', status: 'open' },
+  ],
   'v2-banking-mixed': [
     { id: 'ba-1', bank: 'Bank of America', type: 'Checking', last4: '5678', routing: '021000021', status: 'open' },
     { id: 'ba-2', bank: 'Chase Bank', type: 'Checking', last4: '4821', routing: '021000089', status: 'open' },

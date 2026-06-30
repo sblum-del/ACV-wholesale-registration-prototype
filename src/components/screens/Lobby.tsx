@@ -377,7 +377,7 @@ export function Lobby({ setView, startScenario }: Props) {
             </p>
           </div>
 
-          {/* Row 1 — No accounts */}
+          {/* Row 1 — No accounts + Many accounts all open */}
           <div className="grid grid-cols-3 gap-5 mb-8">
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#8B5CF6] p-6 flex flex-col hover:shadow-md transition-shadow">
               <div className="flex items-center gap-2 mb-3">
@@ -392,6 +392,23 @@ export function Lobby({ setView, startScenario }: Props) {
                 AuctionAccess returns zero bank accounts. No NetSuite records created. User is routed directly to the ACH form — no banking selection screen shown.
               </p>
               <PrimaryButton onClick={() => startScenario('v2-banking-no-accounts')} className="mt-5 w-full justify-center">
+                Start →
+              </PrimaryButton>
+            </div>
+
+            <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#8B5CF6] p-6 flex flex-col hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold text-[#0E0E0F]">Multiple Accounts — All Open</span>
+                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F5F3FF] text-[#5B21B6]">Banking Variation</span>
+              </div>
+              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
+                Net-New User · Single Dealership · 3 Verified Open Accounts
+              </p>
+              <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
+              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                AuctionAccess returns 3 bank accounts. JPMorgan confirms all are open and active. Dealer selects one as primary — ACH is still available as an alternative.
+              </p>
+              <PrimaryButton onClick={() => startScenario('v2-banking-many')} className="mt-5 w-full justify-center">
                 Start →
               </PrimaryButton>
             </div>
