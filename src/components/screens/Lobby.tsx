@@ -47,96 +47,14 @@ const inProgressScenarios = [
   { num: 2, id: 'CANCEL', scenario: 'r6n', clickable: true, title: 'Net-New User — Requests Cancellation via Registration Specialist', desc: 'Net-new user encounters an in-progress application. They contact Rob Smyton to cancel. The specialist cancels via Salesforce — dealership then appears as available to register fresh.' },
 ]
 
-// ── STAKEHOLDER FEEDBACK TAB ─────────────────────────────────────
-function FeedbackTab() {
-  return (
-    <div className="flex items-center justify-center py-20 text-center px-6">
-      <div>
-        <p className="text-3xl mb-3">💬</p>
-        <p className="font-semibold text-[#0E0E0F] text-lg">Stakeholder Feedback</p>
-        <p className="text-sm text-[#55575C] mt-2 max-w-md">
-          Feedback collection is being configured. Use Figma's native commenting on the prototype frames to leave feedback on specific screens.
-        </p>
-      </div>
-    </div>
-  )
-}
-
-// ── PRODUCT WIP TAB ──────────────────────────────────────────────
-function WIPTab({ setView }: { setView: (v: View) => void }) {
-  const [input, setInput] = useState('')
-  const [unlocked, setUnlocked] = useState(false)
-  const [error, setError] = useState(false)
-
-  if (!unlocked) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="bg-white border border-[#E8E9EB] rounded-2xl p-10 max-w-sm w-full text-center shadow-sm">
-        <div className="w-14 h-14 rounded-full bg-[#0C2340] flex items-center justify-center mx-auto mb-6">
-          <span className="text-white text-2xl">🔒</span>
-        </div>
-        <h2 className="font-bold text-xl text-[#0E0E0F] mb-2">Product WIP</h2>
-        <p className="text-sm text-[#55575C] mb-6">This section contains work-in-progress scenarios not ready for stakeholder review.</p>
-        <input
-          type="password"
-          value={input}
-          onChange={e => { setInput(e.target.value); setError(false) }}
-          onKeyDown={e => e.key === 'Enter' && (input === 'seth' ? setUnlocked(true) : setError(true))}
-          placeholder="Enter passcode"
-          className={`w-full border rounded-lg px-4 py-3 text-sm text-center outline-none mb-3 ${error ? 'border-[#DC2626] bg-[#FFF0F0]' : 'border-[#D1D3D6] focus:border-[#0077D8]'}`}
-        />
-        {error && <p className="text-xs text-[#DC2626] mb-3">Incorrect passcode</p>}
-        <PrimaryButton onClick={() => input === 'seth' ? setUnlocked(true) : setError(true)} className="w-full justify-center">
-          Unlock
-        </PrimaryButton>
-      </div>
-    </div>
-  )
-
-  return (
-    <div className="max-w-4xl mx-auto px-6 py-8">
-      <div className="bg-[#FFF0F0] border border-[#FCA5A5] rounded-xl px-5 py-3 mb-6 flex items-center gap-2">
-        <span className="text-red-600 font-bold text-xs uppercase tracking-wide">⚠️ NOT FOR STAKEHOLDER REVIEW</span>
-        <span className="text-red-600 text-xs">— Work in progress content</span>
-      </div>
-      <p className="text-sm text-[#55575C] mb-8">The following scenarios and features are under development and not yet ready for stakeholder review.</p>
-      <div className="grid grid-cols-2 gap-5">
-        {[
-          { title: 'Dealer Group Registration — Centralized', desc: 'Full centralized operating model flow for Group One Automotive. 17 rooftops, net-new and existing paths.', action: () => setView('dg-intro') },
-          { title: 'Dealer Group Registration — Decentralized', desc: 'Individual rooftop registration with group flag. Coming soon.', action: null },
-          { title: 'Internal Spotlight: Dealer Group → Janelle\'s Team', desc: 'SF Application record flagged, report link surfaced.', action: null },
-          { title: 'Internal Spotlight: DocuSign 24hr SLA', desc: 'Automated reminder email + 48hr specialist task.', action: null },
-          { title: 'Internal Spotlight: Application Rejection', desc: 'SF Application in Rejected status. Pending SF detail.', action: null },
-          { title: 'Internal Spotlight: Franchise Owner Notification', desc: 'Patty Vadella notification when Dealer Type = Franchise.', action: null },
-        ].map((item, i) => (
-          <div key={i} className="bg-white border border-[#E8E9EB] rounded-xl p-6 flex flex-col">
-            <p className="font-semibold text-sm text-[#0E0E0F] mb-2">{item.title}</p>
-            <p className="text-xs text-[#55575C] leading-relaxed flex-1">{item.desc}</p>
-            {item.action ? (
-              <PrimaryButton onClick={item.action} className="mt-4 w-full justify-center text-xs">
-                Open →
-              </PrimaryButton>
-            ) : (
-              <button className="mt-4 w-full bg-[#EBEBEF] text-[#55575C] rounded-full py-2.5 text-xs font-semibold cursor-not-allowed">
-                Coming Soon
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
-    </div>
-  )
-}
-
 // ── MAIN LOBBY ───────────────────────────────────────────────────
-export function Lobby({ setView, startScenario }: Props) {
-  const [activeTab, setActiveTab] = useState<'exec' | 'prototype' | 'feedback' | 'wip' | 'updated'>('exec')
+export function Lobby({ startScenario }: Props) {
+  const [activeTab, setActiveTab] = useState<'exec' | 'prototype' | 'updated'>('updated')
 
   const tabs = [
-    { id: 'exec',      label: 'Executive Summary' },
-    { id: 'prototype', label: 'Interactive Prototype' },
-    { id: 'feedback',  label: 'Stakeholder Feedback' },
-    { id: 'wip',       label: '🔒 Product WIP' },
-    { id: 'updated',   label: 'Updated Prototypes' },
+    { id: 'exec',      label: 'Executive Summary',         legacy: false },
+    { id: 'prototype', label: 'Interactive Prototype',     legacy: true  },
+    { id: 'updated',   label: 'Updated Prototypes',        legacy: false },
   ] as const
 
   return (
@@ -150,17 +68,21 @@ export function Lobby({ setView, startScenario }: Props) {
           </div>
         </div>
         {/* Tabs */}
-        <div className="flex gap-1">
+        <div className="flex gap-1 items-end">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-5 py-3 text-sm font-medium cursor-pointer border-b-2 transition-colors
-                ${activeTab === tab.id
-                  ? 'border-[#F26522] text-[#F26522]'
-                  : 'border-transparent text-[#55575C] hover:text-[#0E0E0F]'}`}
+                ${tab.legacy
+                  ? activeTab === tab.id
+                    ? 'border-[#9CA3AF] text-[#6B7280]'
+                    : 'border-transparent text-[#9CA3AF] hover:text-[#6B7280]'
+                  : activeTab === tab.id
+                    ? 'border-[#F26522] text-[#F26522]'
+                    : 'border-transparent text-[#55575C] hover:text-[#0E0E0F]'}`}
             >
-              {tab.label}
+              {tab.legacy ? <span className="flex items-center gap-1.5">{tab.label} <span className="text-[10px] font-normal bg-[#F3F4F6] text-[#9CA3AF] rounded px-1.5 py-0.5 tracking-wide">v1</span></span> : tab.label}
             </button>
           ))}
         </div>
@@ -284,12 +206,6 @@ export function Lobby({ setView, startScenario }: Props) {
           </div>
         </div>
       )}
-
-      {/* ── FEEDBACK TAB ── */}
-      {activeTab === 'feedback' && <FeedbackTab />}
-
-      {/* ── WIP TAB ── */}
-      {activeTab === 'wip' && <WIPTab setView={setView} />}
 
       {/* ── UPDATED PROTOTYPES TAB ── */}
       {activeTab === 'updated' && (
