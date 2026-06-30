@@ -54,31 +54,14 @@ export function V2InProgressOtherUser({ setView, applicationCancelled, isExistin
         {/* ── V2-IP1 (existing user) ── */}
         {isExistingUser && (
           <>
-            {!applicationCancelled && (
-              <>
-                <p className="text-sm text-[#55575C] mb-3">
-                  These dealerships are already on ACV. Look for the Joined status to see where you're already active.
-                </p>
-                <div className="border border-[#E8E9EB] rounded-xl px-5 py-4 flex items-center justify-between bg-[#F9FAFB] mb-6">
-                  <div>
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="font-semibold text-[15px] text-[#8D9199]">Speed Auto Group</span>
-                      <span className="bg-[#ECFDF5] text-[#00A576] text-xs font-medium rounded px-2 py-0.5">Registered</span>
-                      <span className="bg-[#EFF6FF] text-[#0077D8] text-xs font-medium rounded px-2 py-0.5">Joined</span>
-                    </div>
-                    <span className="text-sm text-[#8D9199]">Albany, New York</span>
-                  </div>
-                  <span className="text-xs text-[#8D9199] italic shrink-0 ml-4">You're already active here</span>
-                </div>
+            <p className="text-sm text-[#55575C] mb-3">
+              {applicationCancelled
+                ? 'The previous application has been cancelled. You can now start fresh.'
+                : 'The following dealership has a registration in progress that was started by another user.'}
+            </p>
 
-                <p className="text-sm text-[#55575C] mb-3">
-                  The following dealership has a registration in progress that was started by another user.
-                </p>
-              </>
-            )}
-
-            {/* In Progress card */}
-            <div className="border border-[#E8E9EB] rounded-xl px-5 py-4 flex items-center justify-between">
+            {/* In Progress card — shown first */}
+            <div className="border border-[#E8E9EB] rounded-xl px-5 py-4 flex items-center justify-between mb-6">
               <div>
                 <div className="flex items-center gap-2 mb-0.5">
                   <span className="font-semibold text-[15px] text-[#0E0E0F]">Metro Ford of Albany</span>
@@ -96,6 +79,26 @@ export function V2InProgressOtherUser({ setView, applicationCancelled, isExistin
                 {applicationCancelled ? 'Start Registration ›' : 'Cancel ›'}
               </button>
             </div>
+
+            {/* Already registered — shown below */}
+            {!applicationCancelled && (
+              <>
+                <p className="text-sm text-[#55575C] mb-3">
+                  These dealerships are already on ACV. Look for the Joined status to see where you're already active.
+                </p>
+                <div className="border border-[#E8E9EB] rounded-xl px-5 py-4 flex items-center justify-between bg-[#F9FAFB]">
+                  <div>
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="font-semibold text-[15px] text-[#8D9199]">Speed Auto Group</span>
+                      <span className="bg-[#ECFDF5] text-[#00A576] text-xs font-medium rounded px-2 py-0.5">Registered</span>
+                      <span className="bg-[#EFF6FF] text-[#0077D8] text-xs font-medium rounded px-2 py-0.5">Joined</span>
+                    </div>
+                    <span className="text-sm text-[#8D9199]">Albany, New York</span>
+                  </div>
+                  <span className="text-xs text-[#8D9199] italic shrink-0 ml-4">You're already active here</span>
+                </div>
+              </>
+            )}
           </>
         )}
 
