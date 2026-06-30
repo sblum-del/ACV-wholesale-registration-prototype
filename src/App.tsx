@@ -58,6 +58,7 @@ import { V2DocuSign } from './components/screens/v2/V2DocuSign'
 import { V2DocuSignLPOA } from './components/screens/v2/V2DocuSignLPOA'
 import { V2TaxResaleManual } from './components/screens/v2/V2TaxResaleManual'
 import { V2ThankYou } from './components/screens/v2/V2ThankYou'
+import { V2Resume5MSelect } from './components/screens/v2/V2Resume5MSelect'
 
 export default function App() {
   const [view, setView] = useState<View>('lobby')
@@ -112,15 +113,17 @@ export default function App() {
       scenario === 's4' ? 'alabama'
       : scenario === 's5' ? 'oregon'
       : 'idaho'
-    if (scenario === 'v2-15pct') {
+    if (scenario === 'v2-15pct' || scenario === 'v2-r6a') {
       setDocSignStatus({ lpoa: 'pending', taxResale: 'manual' })
-    } else if (scenario === 'v2-5pct') {
+    } else if (scenario === 'v2-r6b') {
+      setDocSignStatus({ lpoa: 'received', taxResale: 'manual' })
+    } else if (scenario === 'v2-5pct' || scenario === 'v2-r5') {
       setDocSignStatus({ lpoa: 'pending', taxResale: 'not-required' })
     } else {
       setDocSignStatus(getInitialDocSign(state))
     }
-    // Resume scenarios: existing user logs in → resume-5m-select
-    const isResume = ['r1','r2','r3','r4','r5','r6','r6n'].includes(scenario)
+    // Resume scenarios: existing user logs in → resume select screen
+    const isResume = ['r1','r2','r3','r4','r5','r6','r6n','v2-r1','v2-r2','v2-r3a','v2-r3b','v2-r4','v2-r5','v2-r6a','v2-r6b'].includes(scenario)
     if (isResume) {
       setIsLoggedIn(false)
       setView('aa-validation')
@@ -139,6 +142,11 @@ export default function App() {
     setSfReturnView(returnTo)
     setView('salesforce-view')
   }
+
+  const isV2 = activeScenario.startsWith('v2-')
+  const isV215pct = activeScenario === 'v2-15pct' || activeScenario === 'v2-r6a' || activeScenario === 'v2-r6b'
+  const isV25pct = activeScenario === 'v2-5pct' || activeScenario === 'v2-r5'
+  const isV2NoAccounts = activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-r3b'
 
   const sharedProps = { isLoggedIn, onLogout: handleLogout }
   return (
@@ -414,10 +422,10 @@ export default function App() {
             'ToS Accepted = TRUE recorded on Application record',
             'Accepted By: James Harlow | Timestamp: Jun 1, 2026 2:14 PM EST',
             'ToS Status on Application → Verified',
-            ...(activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? [] : ['NOTE: DocuSign was already sent at application creation — this does not re-trigger DocuSign']),
+            ...(isV2 ? [] : ['NOTE: DocuSign was already sent at application creation — this does not re-trigger DocuSign']),
           ]}
-          onViewSF={() => { const v = activeScenario === 'v2-banking-no-accounts' ? 'v2-ach-form' : activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-banking' : 'banking'; goToSF(v) }}
-          onContinue={() => setView(activeScenario === 'v2-banking-no-accounts' ? 'v2-ach-form' : activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-banking' : 'banking')}
+          onViewSF={() => goToSF(isV2NoAccounts ? 'v2-ach-form' : isV2 ? 'v2-banking' : 'banking')}
+          onContinue={() => setView(isV2NoAccounts ? 'v2-ach-form' : isV2 ? 'v2-banking' : 'banking')}
         />
       )}
 
@@ -474,7 +482,6 @@ export default function App() {
             ? "Triggered: User acknowledged bank account validation failure"
             : "Triggered: User selected primary bank account"}
           bullets={(() => {
-            const isV2 = activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed'
             if (activeScenario === 's11') return [
               'Banking Collection Status on Application → Pending Resolution',
               'NOTE: No validated bank account was selected — no primary bank data in Salesforce or NetSuite',
@@ -501,8 +508,8 @@ export default function App() {
               'Application resume checkpoint updated — banking step complete',
             ]
           })()}
-          onViewSF={() => goToSF(activeScenario === 'v2-base' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-docusign' : activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-docusign-lpoa' : 'docusign-prompt-post-banking')}
-          onContinue={() => setView(activeScenario === 'v2-base' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-docusign' : activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-docusign-lpoa' : 'docusign-prompt-post-banking')}
+          onViewSF={() => goToSF(isV215pct || isV25pct ? 'v2-docusign-lpoa' : isV2 ? 'v2-docusign' : 'docusign-prompt-post-banking')}
+          onContinue={() => setView(isV215pct || isV25pct ? 'v2-docusign-lpoa' : isV2 ? 'v2-docusign' : 'docusign-prompt-post-banking')}
         />
       )}
 
@@ -550,7 +557,7 @@ export default function App() {
           docSignStatus={docSignStatus}
           setDocSignStatus={setDocSignStatus}
           onLobby={() => setView('lobby')}
-          returnView={(activeScenario === 's1b' || activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed') ? 'schedule-demo' : 'qualifying-questions'}
+          returnView={(activeScenario === 's1b' || isV2) ? 'schedule-demo' : 'qualifying-questions'}
         />
       )}
 
@@ -760,8 +767,8 @@ export default function App() {
         <V2DocuSignLPOA
           setView={setView}
           docSignStatus={docSignStatus}
-          nextView={activeScenario === 'v2-15pct' ? 'v2-tax-resale-manual' : 'v2-thank-you'}
-          showTaxResaleInSidebar={activeScenario === 'v2-15pct'}
+          nextView={isV215pct ? 'v2-tax-resale-manual' : 'v2-thank-you'}
+          showTaxResaleInSidebar={isV215pct}
           {...sharedProps}
         />
       )}
@@ -778,6 +785,15 @@ export default function App() {
         <V2ThankYou
           setView={setView}
           {...sharedProps}
+        />
+      )}
+
+      {view === 'v2-resume-5m-select' && (
+        <V2Resume5MSelect
+          setView={setView}
+          activeScenario={activeScenario}
+          setDocSignStatus={setDocSignStatus}
+          onLogout={handleLogout}
         />
       )}
     </div>

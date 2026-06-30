@@ -23,6 +23,8 @@ export function ExistingUserLogin({ setView, setLoggedIn, onLobby, activeScenari
       setView('in-progress-other-user')
     } else if (['r1','r2','r3','r4','r5'].includes(activeScenario ?? '')) {
       setView('resume-5m-select')
+    } else if (['v2-r1','v2-r2','v2-r3a','v2-r3b','v2-r4','v2-r5','v2-r6a','v2-r6b'].includes(activeScenario ?? '')) {
+      setView('v2-resume-5m-select')
     } else {
       setView('existing-select-dealership')
     }

@@ -29,7 +29,7 @@ export function MFACodeEntry({ setView, setLoggedIn, onLobby, activeScenario }: 
   const [error, setError] = useState(false)
   const [verified, setVerified] = useState(false)
 
-  const existingUserScenarios = ['s9', 's8b', 'r1', 'r2', 'r3', 'r4', 'r5', 'r6']
+  const existingUserScenarios = ['s9', 's8b', 'r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'v2-r1', 'v2-r2', 'v2-r3a', 'v2-r3b', 'v2-r4', 'v2-r5', 'v2-r6a', 'v2-r6b']
   const isExistingUser = existingUserScenarios.includes(activeScenario ?? '')
 
   const handleVerify = () => {

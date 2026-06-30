@@ -455,6 +455,152 @@ export function Lobby({ setView, startScenario }: Props) {
               </PrimaryButton>
             </div>
           </div>
+
+          {/* ── Resume Variation ── */}
+          <div className="mt-10">
+            <h3 className="font-bold text-lg text-[#0E0E0F] mb-1">Resume Variation</h3>
+            <p className="text-sm text-[#55575C] mb-6 max-w-2xl">
+              Returning dealer who started registration and is picking up where they left off. Entry: AA lookup → login → dealership selection shows "In Progress" with a Resume button. R1–R4 use the base (80%) cohort. R5 uses the 5% (LPOA only) cohort. R6a–R6b use the 15% cohort (separate LPOA + manual Tax Resale).
+            </p>
+
+            {/* Row 1 — R1, R2 */}
+            <div className="grid grid-cols-3 gap-5 mb-5">
+              <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-[#0E0E0F]">R1</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at Dealership Information</p>
+                <p className="text-xs text-[#55575C] mb-2">📍 Base (80%) — LPOA + Tax Resale via DocuSign</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                  Dealer left before completing Dealership Information. Resumes at that screen with prior steps not yet complete.
+                </p>
+                <button onClick={() => startScenario('v2-r1')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                  Start →
+                </button>
+              </div>
+
+              <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-[#0E0E0F]">R2</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at Terms of Service</p>
+                <p className="text-xs text-[#55575C] mb-2">📍 Base (80%) — LPOA + Tax Resale via DocuSign</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                  Dealer completed Dealership Information but left before accepting Terms of Service.
+                </p>
+                <button onClick={() => startScenario('v2-r2')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                  Start →
+                </button>
+              </div>
+            </div>
+
+            {/* Row 2 — R3a, R3b */}
+            <div className="grid grid-cols-3 gap-5 mb-5">
+              <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-[#0E0E0F]">R3a</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at Banking — AA Account on File</p>
+                <p className="text-xs text-[#55575C] mb-2">📍 Base (80%) — LPOA + Tax Resale via DocuSign</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                  ToS accepted. Dealer resumes at the banking screen with one AuctionAccess account available to select as primary.
+                </p>
+                <button onClick={() => startScenario('v2-r3a')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                  Start →
+                </button>
+              </div>
+
+              <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-[#0E0E0F]">R3b</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at Banking — ACH Form</p>
+                <p className="text-xs text-[#55575C] mb-2">📍 Base (80%) — LPOA + Tax Resale via DocuSign</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                  ToS accepted. No AA bank accounts on file — dealer resumes directly at the ACH form to provide banking details.
+                </p>
+                <button onClick={() => startScenario('v2-r3b')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                  Start →
+                </button>
+              </div>
+            </div>
+
+            {/* Row 3 — R4, R5 */}
+            <div className="grid grid-cols-3 gap-5 mb-5">
+              <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-[#0E0E0F]">R4</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at DocuSign — Combined LPOA + Tax Resale</p>
+                <p className="text-xs text-[#55575C] mb-2">📍 Base (80%) — LPOA + Tax Resale via DocuSign</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                  Banking complete. Dealer resumes at the combined DocuSign screen — both LPOA and Tax Resale Cert pending in a single envelope.
+                </p>
+                <button onClick={() => startScenario('v2-r4')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                  Start →
+                </button>
+              </div>
+
+              <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-[#0E0E0F]">R5</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at DocuSign — LPOA Only</p>
+                <p className="text-xs text-[#55575C] mb-2">📍 5% Cohort — LPOA only, no Tax Resale required</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                  Banking complete. Dealer resumes at the LPOA-only DocuSign screen. No Tax Resale row appears in the progress bar.
+                </p>
+                <button onClick={() => startScenario('v2-r5')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                  Start →
+                </button>
+              </div>
+            </div>
+
+            {/* Row 4 — R6a, R6b (15% cohort) */}
+            <div className="mb-3">
+              <p className="text-xs font-semibold text-[#55575C] uppercase tracking-wide mb-4">
+                15% Cohort — Separate LPOA & manual Tax Resale collection
+              </p>
+            </div>
+            <div className="grid grid-cols-3 gap-5">
+              <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-[#0E0E0F]">R6a</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at LPOA Screen — LPOA Pending</p>
+                <p className="text-xs text-[#55575C] mb-2">📍 15% Cohort — LPOA via DocuSign · Tax Resale via Specialist</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                  Banking complete. LPOA not yet signed — dealer resumes at the LPOA DocuSign screen. Tax Resale is still pending manual collection by a specialist.
+                </p>
+                <button onClick={() => startScenario('v2-r6a')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                  Start →
+                </button>
+              </div>
+
+              <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold text-[#0E0E0F]">R6b</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at Tax Resale Screen — LPOA Signed</p>
+                <p className="text-xs text-[#55575C] mb-2">📍 15% Cohort — LPOA via DocuSign · Tax Resale via Specialist</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                  Banking complete, LPOA already received. Dealer resumes at the Tax Resale manual screen — specialist contact info shown, LPOA marked as signed in the progress bar.
+                </p>
+                <button onClick={() => startScenario('v2-r6b')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                  Start →
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
       )}
     </div>
