@@ -7,12 +7,20 @@ interface Props {
   dealerGroup: 'yes' | 'no' | null
   dealerGroupName: string
   dealerType: string
+  products?: string[]
   onViewSF: () => void
   nextView?: View
 }
 
-export function SFInterstitialDealership({ setView, mobileNumber, dealerGroup, dealerGroupName, dealerType, onViewSF, nextView = 'terms-of-service' }: Props) {
-  const isDealerGroup = dealerGroup === 'yes'
+const PRODUCT_AUTOMATION: Record<string, string> = {
+  Sell: 'Territory Manager (TM) notified — application surfaces on TM activation report — Account Owner assignment triggered',
+  Buy: 'IST BDR notified — inbound buy lead flagged for outreach',
+  Capital: 'Capital Opportunity created and linked to this Application',
+}
+
+export function SFInterstitialDealership({ setView, mobileNumber, dealerGroup, dealerGroupName, dealerType, products, onViewSF, nextView = 'terms-of-service' }: Props) {
+  const isV2 = products !== undefined
+  const isDealerGroup = isV2 ? dealerGroupName.trim().length > 0 : dealerGroup === 'yes'
 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4 overflow-y-auto">
@@ -79,51 +87,105 @@ export function SFInterstitialDealership({ setView, mobileNumber, dealerGroup, d
               Salesforce — Application Record Updated
             </p>
             <div className="space-y-1.5">
-              <div>
-                <div className="flex items-start gap-2">
-                  <span className="text-[#0071B9] shrink-0 mt-0.5 text-xs">✦</span>
-                  <span className="text-sm text-[#0E0E0F]">
-                    Dealer Group field set to — <strong>{isDealerGroup ? 'Yes' : 'No'}</strong>
-                    {isDealerGroup && dealerGroupName ? ` (${dealerGroupName})` : ''}
-                  </span>
-                </div>
-                <p className="text-xs text-[#55575C] ml-5 mt-0.5 italic">
-                  {isDealerGroup
-                    ? 'Application tagged as Dealer Group. This field remains editable by internal teammates in Salesforce if the classification needs to be updated.'
-                    : 'Application not tagged as Dealer Group. This field remains editable by internal teammates in Salesforce if the dealer later indicates group membership.'}
-                </p>
-              </div>
-
-              {isDealerGroup && (
+              {isV2 ? (
                 <>
                   <div>
                     <div className="flex items-start gap-2">
-                      <span className="text-[#F59600] shrink-0 mt-0.5 text-xs">✦</span>
-                      <span className="text-sm text-[#0E0E0F] font-medium">
-                        ⚡ Application funnelled to Janelle's Major Teams report
+                      <span className="text-[#0071B9] shrink-0 mt-0.5 text-xs">✦</span>
+                      <span className="text-sm text-[#0E0E0F]">
+                        {isDealerGroup
+                          ? `Dealer Group Name recorded on Application — ${dealerGroupName}`
+                          : 'Dealer Group Name field on the application remains null'}
                       </span>
                     </div>
                     <p className="text-xs text-[#55575C] ml-5 mt-0.5 italic">
-                      Real-time notification sent to Janelle's team. Application will appear in the dedicated Dealer Group registrations report for monitoring and assignment.
+                      {isDealerGroup
+                        ? 'Used internally to associate with the correct parent account structure.'
+                        : 'No dealer group was indicated. This field can be updated by internal teammates in Salesforce if the dealer later provides this information.'}
                     </p>
                   </div>
-                  {dealerGroupName && (
+                  {isDealerGroup && (
                     <div>
                       <div className="flex items-start gap-2">
-                        <span className="text-[#0071B9] shrink-0 mt-0.5 text-xs">✦</span>
-                        <span className="text-sm text-[#0E0E0F]">
-                          Dealer Group Name recorded on Application — {dealerGroupName}
+                        <span className="text-[#F59600] shrink-0 mt-0.5 text-xs">✦</span>
+                        <span className="text-sm text-[#0E0E0F] font-medium">
+                          ⚡ Application funnelled to Janelle's Major Teams report
                         </span>
                       </div>
                       <p className="text-xs text-[#55575C] ml-5 mt-0.5 italic">
-                        Used internally to associate with the correct parent account structure.
+                        Real-time notification sent to Janelle's team. Application will appear in the dedicated Dealer Group registrations report for monitoring and assignment.
                       </p>
                     </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div>
+                    <div className="flex items-start gap-2">
+                      <span className="text-[#0071B9] shrink-0 mt-0.5 text-xs">✦</span>
+                      <span className="text-sm text-[#0E0E0F]">
+                        Dealer Group field set to — <strong>{isDealerGroup ? 'Yes' : 'No'}</strong>
+                        {isDealerGroup && dealerGroupName ? ` (${dealerGroupName})` : ''}
+                      </span>
+                    </div>
+                    <p className="text-xs text-[#55575C] ml-5 mt-0.5 italic">
+                      {isDealerGroup
+                        ? 'Application tagged as Dealer Group. This field remains editable by internal teammates in Salesforce if the classification needs to be updated.'
+                        : 'Application not tagged as Dealer Group. This field remains editable by internal teammates in Salesforce if the dealer later indicates group membership.'}
+                    </p>
+                  </div>
+                  {isDealerGroup && (
+                    <>
+                      <div>
+                        <div className="flex items-start gap-2">
+                          <span className="text-[#F59600] shrink-0 mt-0.5 text-xs">✦</span>
+                          <span className="text-sm text-[#0E0E0F] font-medium">
+                            ⚡ Application funnelled to Janelle's Major Teams report
+                          </span>
+                        </div>
+                        <p className="text-xs text-[#55575C] ml-5 mt-0.5 italic">
+                          Real-time notification sent to Janelle's team. Application will appear in the dedicated Dealer Group registrations report for monitoring and assignment.
+                        </p>
+                      </div>
+                      {dealerGroupName && (
+                        <div>
+                          <div className="flex items-start gap-2">
+                            <span className="text-[#0071B9] shrink-0 mt-0.5 text-xs">✦</span>
+                            <span className="text-sm text-[#0E0E0F]">
+                              Dealer Group Name recorded on Application — {dealerGroupName}
+                            </span>
+                          </div>
+                          <p className="text-xs text-[#55575C] ml-5 mt-0.5 italic">
+                            Used internally to associate with the correct parent account structure.
+                          </p>
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               )}
             </div>
           </div>
+
+          {/* Products Interested — v2 only */}
+          {isV2 && products && products.length > 0 && (
+            <div>
+              <p className="text-xs font-semibold text-[#0071B9] uppercase tracking-wide mb-2 border-b border-[#E8E9EB] pb-1">
+                Salesforce — Products Interested
+              </p>
+              <div className="space-y-1.5">
+                {products.map(p => (
+                  <div key={p}>
+                    <div className="flex items-start gap-2">
+                      <span className="text-[#F59600] shrink-0 mt-0.5 text-xs">✦</span>
+                      <span className="text-sm text-[#0E0E0F] font-medium">{p} — interest recorded on Application</span>
+                    </div>
+                    <p className="text-xs text-[#55575C] ml-5 mt-0.5 italic">{PRODUCT_AUTOMATION[p]}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
         </div>
 

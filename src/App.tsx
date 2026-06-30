@@ -77,6 +77,8 @@ export default function App() {
   const [selectedDealerships, setSelectedDealerships] = useState<string[]>([])
   const [dealerType, setDealerType] = useState('')
   const [dealerGroupName, setDealerGroupName] = useState('')
+  const [v2Products, setV2Products] = useState<string[]>([])
+  const [selectedBankInfo, setSelectedBankInfo] = useState<{ bank: string; type: string; last4: string; method: 'aa' | 'ach' } | null>(null)
   const [dgSituation, setDGSituation] = useState<'net-new' | 'existing' | null>(null)
   const [selectedRooftops, setSelectedRooftops] = useState<string[]>([])
 
@@ -104,6 +106,8 @@ export default function App() {
 
   const startScenario = (scenario: ActiveScenario) => {
     setActiveScenario(scenario)
+    setV2Products([])
+    setSelectedBankInfo(null)
     const state: DealerState =
       scenario === 's4' ? 'alabama'
       : scenario === 's5' ? 'oregon'
@@ -410,7 +414,7 @@ export default function App() {
             'ToS Accepted = TRUE recorded on Application record',
             'Accepted By: James Harlow | Timestamp: Jun 1, 2026 2:14 PM EST',
             'ToS Status on Application → Verified',
-            'NOTE: DocuSign was already sent at application creation — this does not re-trigger DocuSign',
+            ...(activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? [] : ['NOTE: DocuSign was already sent at application creation — this does not re-trigger DocuSign']),
           ]}
           onViewSF={() => { const v = activeScenario === 'v2-banking-no-accounts' ? 'v2-ach-form' : activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-banking' : 'banking'; goToSF(v) }}
           onContinue={() => setView(activeScenario === 'v2-banking-no-accounts' ? 'v2-ach-form' : activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-banking' : 'banking')}
@@ -469,18 +473,34 @@ export default function App() {
           trigger={activeScenario === 's11'
             ? "Triggered: User acknowledged bank account validation failure"
             : "Triggered: User selected primary bank account"}
-          bullets={activeScenario === 's11' ? [
-            'Banking Collection Status on Application → Pending Resolution',
-            'NOTE: No validated bank account was selected — no primary bank data in Salesforce or NetSuite',
-            'Application flagged for specialist follow-up — banking must be resolved before account activation',
-            'Application resume checkpoint updated — dealer can continue remaining registration steps',
-          ] : [
-            'Banking Collection Status on Application → TRUE',
-            'Primary bank account selection recorded on Application record',
-            'NOTE: No banking data stored in Salesforce — all banking data lives in NetSuite only',
-            'NetSuite: Chase Bank ••••4821 marked as primary for Metro Ford of Albany',
-            'Application resume checkpoint updated — banking step complete',
-          ]}
+          bullets={(() => {
+            const isV2 = activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed'
+            if (activeScenario === 's11') return [
+              'Banking Collection Status on Application → Pending Resolution',
+              'NOTE: No validated bank account was selected — no primary bank data in Salesforce or NetSuite',
+              'Application flagged for specialist follow-up — banking must be resolved before account activation',
+              'Application resume checkpoint updated — dealer can continue remaining registration steps',
+            ]
+            if (isV2) {
+              const bankBullet = selectedBankInfo?.method === 'ach'
+                ? 'ACH Form Primary Account Provided → true'
+                : selectedBankInfo
+                ? `AuctionAccess Bank Account Primary Chosen → ${selectedBankInfo.bank} ${selectedBankInfo.type} ••••${selectedBankInfo.last4}`
+                : 'Banking Collection Status on Application → TRUE'
+              return [
+                'Banking Collection Status on Application → TRUE',
+                bankBullet,
+                'NOTE: No banking data stored in Salesforce — all banking data lives in NetSuite only',
+              ]
+            }
+            return [
+              'Banking Collection Status on Application → TRUE',
+              'Primary bank account selection recorded on Application record',
+              'NOTE: No banking data stored in Salesforce — all banking data lives in NetSuite only',
+              'NetSuite: Chase Bank ••••4821 marked as primary for Metro Ford of Albany',
+              'Application resume checkpoint updated — banking step complete',
+            ]
+          })()}
           onViewSF={() => goToSF(activeScenario === 'v2-base' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-docusign' : activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-docusign-lpoa' : 'docusign-prompt-post-banking')}
           onContinue={() => setView(activeScenario === 'v2-base' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-docusign' : activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-docusign-lpoa' : 'docusign-prompt-post-banking')}
         />
@@ -657,8 +677,8 @@ export default function App() {
                 'NetSuite account record created for Metro Ford of Albany',
                 'NetSuite calls AuctionAccess — pulls all open bank accounts on file → creates bank account records in NetSuite',
                 'Bank account records run through JPMorgan validation',
-                'JPMorgan results attached to NetSuite bank account records',
-                'Results returned to customer-facing UX — no banking data passes through Salesforce',
+                'JPMorgan results attached to NetSuite bank account records, visible for registration teammates',
+                'Bank accounts are surfaced from NetSuite to the customer-facing UX — no banking data passes through Salesforce',
               ],
             },
           ]}
@@ -677,6 +697,8 @@ export default function App() {
           setDealerType={setDealerType}
           dealerGroupName={dealerGroupName}
           setDealerGroupName={setDealerGroupName}
+          products={v2Products}
+          setProducts={setV2Products}
           {...sharedProps}
         />
       )}
@@ -688,6 +710,7 @@ export default function App() {
           dealerGroup={dealerGroup}
           dealerGroupName={dealerGroupName}
           dealerType={dealerType}
+          products={v2Products}
           nextView="v2-terms-of-service"
           onViewSF={() => { setSfReturnView('v2-terms-of-service'); setView('salesforce-view') }}
         />
@@ -708,6 +731,7 @@ export default function App() {
           setView={setView}
           activeScenario={activeScenario}
           setPrimaryBankSelected={setPrimaryBankSelected}
+          setSelectedBankInfo={setSelectedBankInfo}
           docSignStatus={docSignStatus}
           {...sharedProps}
         />
@@ -718,6 +742,7 @@ export default function App() {
           setView={setView}
           activeScenario={activeScenario}
           setPrimaryBankSelected={setPrimaryBankSelected}
+          setSelectedBankInfo={setSelectedBankInfo}
           docSignStatus={docSignStatus}
           {...sharedProps}
         />

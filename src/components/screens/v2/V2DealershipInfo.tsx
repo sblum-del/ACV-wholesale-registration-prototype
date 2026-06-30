@@ -16,6 +16,8 @@ interface Props {
   setDealerType: (s: string) => void
   dealerGroupName: string
   setDealerGroupName: (s: string) => void
+  products: string[]
+  setProducts: (p: string[]) => void
   isLoggedIn: boolean
   onLogout: () => void
 }
@@ -35,7 +37,7 @@ const fields = [
   { label: 'Business Address', value: '1450 Central Ave, Albany, ID 83705' },
 ]
 
-export function V2DealershipInfo({ setView, activeScenario, mobileNumber, setMobileNumber, dealerType, setDealerType, dealerGroupName, setDealerGroupName, isLoggedIn, onLogout }: Props) {
+export function V2DealershipInfo({ setView, activeScenario, mobileNumber, setMobileNumber, dealerType, setDealerType, dealerGroupName, setDealerGroupName, products, setProducts, isLoggedIn, onLogout }: Props) {
   const combineLpoaAndTax = activeScenario !== 'v2-15pct' && activeScenario !== 'v2-5pct'
   const showTaxResale = activeScenario !== 'v2-5pct'
   const [smsOptIn, setSmsOptIn] = useState(false)
@@ -50,9 +52,8 @@ export function V2DealershipInfo({ setView, activeScenario, mobileNumber, setMob
   const [billingContactPhone, setBillingContactPhone] = useState('')
   const [billingContactEmail, setBillingContactEmail] = useState('')
 
-  const [products, setProducts] = useState<string[]>([])
   const toggleProduct = (p: string) =>
-    setProducts(prev => prev.includes(p) ? prev.filter(x => x !== p) : [...prev, p])
+    setProducts(products.includes(p) ? products.filter(x => x !== p) : [...products, p])
 
   const primaryContactDetailsValid =
     primaryContact === 'no'

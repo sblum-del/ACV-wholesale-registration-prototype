@@ -9,6 +9,7 @@ interface Props {
   setView: (v: View) => void
   activeScenario: ActiveScenario
   setPrimaryBankSelected: (b: boolean) => void
+  setSelectedBankInfo: (info: { bank: string; type: string; last4: string; method: 'aa' | 'ach' }) => void
   docSignStatus?: DocSignStatus
   isLoggedIn?: boolean
   onLogout?: () => void
@@ -43,7 +44,7 @@ const DEFAULT_ACCOUNTS: Account[] = [
   { id: 'ba-1', bank: 'Bank of America', type: 'Checking', last4: '5678', routing: '021000021', status: 'open' },
 ]
 
-export function V2Banking({ setView, activeScenario, setPrimaryBankSelected, docSignStatus, isLoggedIn, onLogout }: Props) {
+export function V2Banking({ setView, activeScenario, setPrimaryBankSelected, setSelectedBankInfo, docSignStatus, isLoggedIn, onLogout }: Props) {
   const [primaryId, setPrimaryId] = useState<string | null>(null)
 
   const accounts = SCENARIO_ACCOUNTS[activeScenario] ?? DEFAULT_ACCOUNTS
@@ -54,6 +55,8 @@ export function V2Banking({ setView, activeScenario, setPrimaryBankSelected, doc
   const showTaxResale = activeScenario !== 'v2-5pct'
 
   const handleContinue = () => {
+    const acct = accounts.find(a => a.id === primaryId)
+    if (acct) setSelectedBankInfo({ bank: acct.bank, type: acct.type, last4: acct.last4, method: 'aa' })
     setPrimaryBankSelected(true)
     setView('sf-interstitial-3')
   }

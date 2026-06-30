@@ -9,12 +9,13 @@ interface Props {
   setView: (v: View) => void
   activeScenario: ActiveScenario
   setPrimaryBankSelected: (b: boolean) => void
+  setSelectedBankInfo: (info: { bank: string; type: string; last4: string; method: 'aa' | 'ach' }) => void
   docSignStatus?: DocSignStatus
   isLoggedIn?: boolean
   onLogout?: () => void
 }
 
-export function V2ACHForm({ setView, activeScenario, setPrimaryBankSelected, docSignStatus, isLoggedIn, onLogout }: Props) {
+export function V2ACHForm({ setView, activeScenario, setPrimaryBankSelected, setSelectedBankInfo, docSignStatus, isLoggedIn, onLogout }: Props) {
   const combineLpoaAndTax = activeScenario !== 'v2-15pct' && activeScenario !== 'v2-5pct'
   const showTaxResale = activeScenario !== 'v2-5pct'
   const [bankName, setBankName] = useState('')
@@ -30,6 +31,7 @@ export function V2ACHForm({ setView, activeScenario, setPrimaryBankSelected, doc
   const canSubmit = !!(bankName && holder && accountType && accountNum && confirmAccount && routing && confirmRouting && voidedCheckFile)
 
   const handleSubmit = () => {
+    setSelectedBankInfo({ bank: bankName || 'ACH submission', type: accountType || 'Checking', last4: accountNum.slice(-4) || '', method: 'ach' })
     setPrimaryBankSelected(true)
     setView('sf-interstitial-3')
   }

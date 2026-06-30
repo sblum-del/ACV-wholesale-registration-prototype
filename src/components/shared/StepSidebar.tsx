@@ -83,22 +83,18 @@ export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolutio
                     <p className="text-[10px] mt-0.5 text-[#F59600]">Pending Resolution</p>
                   )}
                   {/* Show SF status for non-combined DocSign steps */}
-                  {step.key === 'lpoa' && docSignStatus && (
-                    <p className={`text-[10px] mt-0.5 ${docSignStatus.lpoa === 'received' ? 'text-[#00A576]' : 'text-[#8D9199]'}`}>
-                      {docSignStatus.lpoa === 'received' ? 'Received in Salesforce' : 'Pending in Salesforce'}
-                    </p>
+                  {step.key === 'lpoa' && docSignStatus && docSignStatus.lpoa === 'received' && (
+                    <p className="text-[10px] mt-0.5 text-[#00A576]">Signature received</p>
                   )}
-                  {step.key === 'tax' && docSignStatus && (
+                  {step.key === 'tax' && docSignStatus && (docSignStatus.taxResale === 'received' || docSignStatus.taxResale === 'not-required' || docSignStatus.taxResale === 'manual') && (
                     <p className={`text-[10px] mt-0.5 ${
                       docSignStatus.taxResale === 'received' ? 'text-[#00A576]'
                       : docSignStatus.taxResale === 'not-required' ? 'text-[#0077D8]'
-                      : docSignStatus.taxResale === 'manual' ? 'text-[#F59600]'
-                      : 'text-[#8D9199]'
+                      : 'text-[#F59600]'
                     }`}>
-                      {docSignStatus.taxResale === 'received' ? 'Received in Salesforce'
+                      {docSignStatus.taxResale === 'received' ? 'Received'
                         : docSignStatus.taxResale === 'not-required' ? 'Not Required — Oregon'
-                        : docSignStatus.taxResale === 'manual' ? 'Manual collection — specialist'
-                        : 'Pending in Salesforce'}
+                        : 'Manual collection — specialist'}
                     </p>
                   )}
                 </div>
