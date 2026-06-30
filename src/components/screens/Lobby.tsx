@@ -304,8 +304,8 @@ export function Lobby({ setView, startScenario }: Props) {
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-5">
-            {/* 80% Cohort — Base */}
+          {/* ── Base Scenario ── */}
+          <div className="grid grid-cols-3 gap-5 mb-12">
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0077D8] p-6 flex flex-col hover:shadow-md transition-shadow">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xs font-bold text-[#0E0E0F]">80% Cohort</span>
@@ -322,8 +322,17 @@ export function Lobby({ setView, startScenario }: Props) {
                 Start →
               </PrimaryButton>
             </div>
+          </div>
 
-            {/* 15% Cohort — Manual Tax Resale */}
+          {/* ── Tax Resale Variation ── */}
+          <div className="mb-3">
+            <h3 className="font-bold text-lg text-[#0E0E0F] mb-1">Tax Resale Variation</h3>
+            <p className="text-sm text-[#55575C] mb-6 max-w-2xl">
+              Same base flow — differs only in how the Tax Resale Certificate is collected, which affects the progress bar and post-banking screens.
+            </p>
+          </div>
+          <div className="grid grid-cols-3 gap-5 mb-12">
+            {/* 15% Cohort */}
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#F26522] p-6 flex flex-col hover:shadow-md transition-shadow">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xs font-bold text-[#0E0E0F]">15% Cohort</span>
@@ -341,7 +350,7 @@ export function Lobby({ setView, startScenario }: Props) {
               </PrimaryButton>
             </div>
 
-            {/* 5% Cohort — No Tax Resale */}
+            {/* 5% Cohort */}
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#00A576] p-6 flex flex-col hover:shadow-md transition-shadow">
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xs font-bold text-[#0E0E0F]">5% Cohort</span>
@@ -355,6 +364,76 @@ export function Lobby({ setView, startScenario }: Props) {
                 States that don't require a Tax Resale Certificate at all. LPOA only via DocuSign. Progress bar shows no Tax Resale row.
               </p>
               <PrimaryButton onClick={() => startScenario('v2-5pct')} className="mt-5 w-full justify-center">
+                Start →
+              </PrimaryButton>
+            </div>
+          </div>
+
+          {/* ── Banking Variation ── */}
+          <div className="mb-3">
+            <h3 className="font-bold text-lg text-[#0E0E0F] mb-1">Banking Variation</h3>
+            <p className="text-sm text-[#55575C] mb-6 max-w-2xl">
+              Same base flow and Tax Resale handling — differs only in the banking screen based on what AuctionAccess returns and JPMorgan validation results.
+            </p>
+          </div>
+
+          {/* Row 1 — No accounts */}
+          <div className="grid grid-cols-3 gap-5 mb-8">
+            <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#8B5CF6] p-6 flex flex-col hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold text-[#0E0E0F]">No AA Bank Accounts</span>
+                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F5F3FF] text-[#5B21B6]">Banking Variation</span>
+              </div>
+              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
+                Net-New User · Single Dealership · No Accounts on File
+              </p>
+              <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
+              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                AuctionAccess returns zero bank accounts. No NetSuite records created. User is routed directly to the ACH form — no banking selection screen shown.
+              </p>
+              <PrimaryButton onClick={() => startScenario('v2-banking-no-accounts')} className="mt-5 w-full justify-center">
+                Start →
+              </PrimaryButton>
+            </div>
+          </div>
+
+          {/* Row 2 — Closed account display (sub-labeled) */}
+          <div className="mb-3">
+            <p className="text-xs font-semibold text-[#55575C] uppercase tracking-wide mb-4">
+              If we display the closed bank account status confirmed by JPMorgan to the customer
+            </p>
+          </div>
+          <div className="grid grid-cols-3 gap-5">
+            <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#8B5CF6] p-6 flex flex-col hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold text-[#0E0E0F]">Multiple Accounts — One Closed</span>
+                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F5F3FF] text-[#5B21B6]">Banking Variation</span>
+              </div>
+              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
+                Net-New User · Single Dealership · 3 Accounts (1 Closed)
+              </p>
+              <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
+              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                3 accounts from AuctionAccess. JPMorgan confirmed one is closed — shown greyed out with explanatory text, not selectable. Dealer picks from the 2 open accounts.
+              </p>
+              <PrimaryButton onClick={() => startScenario('v2-banking-mixed')} className="mt-5 w-full justify-center">
+                Start →
+              </PrimaryButton>
+            </div>
+
+            <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#8B5CF6] p-6 flex flex-col hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold text-[#0E0E0F]">Single Closed Account</span>
+                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F5F3FF] text-[#5B21B6]">Banking Variation</span>
+              </div>
+              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
+                Net-New User · Single Dealership · 1 Account (Closed)
+              </p>
+              <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
+              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                1 account from AuctionAccess. JPMorgan confirmed it's closed — displayed greyed out, not selectable. Banking screen shown with ACH as the only path forward.
+              </p>
+              <PrimaryButton onClick={() => startScenario('v2-banking-single-closed')} className="mt-5 w-full justify-center">
                 Start →
               </PrimaryButton>
             </div>

@@ -45,7 +45,7 @@ export function MFACodeEntry({ setView, setLoggedIn, onLobby, activeScenario }: 
   const getNextView = (): View => {
     if (isExistingUser) return 'existing-user-login'
     if (activeScenario === 's8') return 'join-flow'
-    if (activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct') return 'v2-create-credentials'
+    if (activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed') return 'v2-create-credentials'
     // r6n = net-new user, must create credentials before seeing in-progress screen
     return 'create-credentials'
   }

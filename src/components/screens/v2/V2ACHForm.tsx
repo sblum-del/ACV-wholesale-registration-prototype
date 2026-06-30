@@ -15,7 +15,7 @@ interface Props {
 }
 
 export function V2ACHForm({ setView, activeScenario, setPrimaryBankSelected, docSignStatus, isLoggedIn, onLogout }: Props) {
-  const combineLpoaAndTax = activeScenario === 'v2-base'
+  const combineLpoaAndTax = activeScenario !== 'v2-15pct' && activeScenario !== 'v2-5pct'
   const showTaxResale = activeScenario !== 'v2-5pct'
   const [bankName, setBankName] = useState('')
   const [holder, setHolder] = useState('')

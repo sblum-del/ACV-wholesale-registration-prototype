@@ -412,8 +412,8 @@ export default function App() {
             'ToS Status on Application → Verified',
             'NOTE: DocuSign was already sent at application creation — this does not re-trigger DocuSign',
           ]}
-          onViewSF={() => goToSF(activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-banking' : 'banking')}
-          onContinue={() => setView(activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-banking' : 'banking')}
+          onViewSF={() => { const v = activeScenario === 'v2-banking-no-accounts' ? 'v2-ach-form' : activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-banking' : 'banking'; goToSF(v) }}
+          onContinue={() => setView(activeScenario === 'v2-banking-no-accounts' ? 'v2-ach-form' : activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-banking' : 'banking')}
         />
       )}
 
@@ -481,8 +481,8 @@ export default function App() {
             'NetSuite: Chase Bank ••••4821 marked as primary for Metro Ford of Albany',
             'Application resume checkpoint updated — banking step complete',
           ]}
-          onViewSF={() => goToSF(activeScenario === 'v2-base' ? 'v2-docusign' : activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-docusign-lpoa' : 'docusign-prompt-post-banking')}
-          onContinue={() => setView(activeScenario === 'v2-base' ? 'v2-docusign' : activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-docusign-lpoa' : 'docusign-prompt-post-banking')}
+          onViewSF={() => goToSF(activeScenario === 'v2-base' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-docusign' : activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-docusign-lpoa' : 'docusign-prompt-post-banking')}
+          onContinue={() => setView(activeScenario === 'v2-base' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed' ? 'v2-docusign' : activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-docusign-lpoa' : 'docusign-prompt-post-banking')}
         />
       )}
 
@@ -530,7 +530,7 @@ export default function App() {
           docSignStatus={docSignStatus}
           setDocSignStatus={setDocSignStatus}
           onLobby={() => setView('lobby')}
-          returnView={(activeScenario === 's1b' || activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct') ? 'schedule-demo' : 'qualifying-questions'}
+          returnView={(activeScenario === 's1b' || activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed') ? 'schedule-demo' : 'qualifying-questions'}
         />
       )}
 

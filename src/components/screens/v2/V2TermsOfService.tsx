@@ -60,7 +60,7 @@ These terms shall be governed and construed in accordance with the laws of the S
 Last Updated: June 18, 2025`
 
 export function V2TermsOfService({ setView, activeScenario, tosScrolled, setTosScrolled, isLoggedIn, onLogout }: Props) {
-  const combineLpoaAndTax = activeScenario === 'v2-base'
+  const combineLpoaAndTax = activeScenario !== 'v2-15pct' && activeScenario !== 'v2-5pct'
   const showTaxResale = activeScenario !== 'v2-5pct'
   const scrollRef = useRef<HTMLDivElement>(null)
   const [agreed, setAgreed] = useState(false)

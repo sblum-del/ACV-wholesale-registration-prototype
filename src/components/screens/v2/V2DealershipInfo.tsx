@@ -36,7 +36,7 @@ const fields = [
 ]
 
 export function V2DealershipInfo({ setView, activeScenario, mobileNumber, setMobileNumber, dealerType, setDealerType, dealerGroupName, setDealerGroupName, isLoggedIn, onLogout }: Props) {
-  const combineLpoaAndTax = activeScenario === 'v2-base'
+  const combineLpoaAndTax = activeScenario !== 'v2-15pct' && activeScenario !== 'v2-5pct'
   const showTaxResale = activeScenario !== 'v2-5pct'
   const [smsOptIn, setSmsOptIn] = useState(false)
 
