@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { View, DocSignStatus } from '../../../types'
+import type { View, DocSignStatus, ActiveScenario } from '../../../types'
 import { ACVHeader } from '../../shared/ACVHeader'
 import { StepSidebar } from '../../shared/StepSidebar'
 import { PrimaryButton } from '../../shared/PrimaryButton'
@@ -7,6 +7,7 @@ import { ScreenLabel } from '../../shared/ScreenLabel'
 
 interface Props {
   setView: (v: View) => void
+  activeScenario: ActiveScenario
   setPrimaryBankSelected: (b: boolean) => void
   docSignStatus?: DocSignStatus
   isLoggedIn?: boolean
@@ -17,7 +18,9 @@ const ACCOUNTS = [
   { id: 'ba-1', bank: 'Bank of America', type: 'Checking', last4: '5678', routing: '021000021' },
 ]
 
-export function V2Banking({ setView, setPrimaryBankSelected, docSignStatus, isLoggedIn, onLogout }: Props) {
+export function V2Banking({ setView, activeScenario, setPrimaryBankSelected, docSignStatus, isLoggedIn, onLogout }: Props) {
+  const combineLpoaAndTax = activeScenario === 'v2-base'
+  const showTaxResale = activeScenario !== 'v2-5pct'
   const [primaryId, setPrimaryId] = useState<string | null>(null)
 
   const handleContinue = () => {
@@ -30,7 +33,7 @@ export function V2Banking({ setView, setPrimaryBankSelected, docSignStatus, isLo
       <ScreenLabel id="V2-5" name="Bank Account" />
       <ACVHeader registering onLobby={() => setView('lobby')} isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <div className="flex gap-0 px-10 pt-8 pb-12">
-        <StepSidebar activeStep={2} docSignStatus={docSignStatus} showTimeEstimate={false} lpoaFullName={true} combineLpoaAndTax={true} />
+        <StepSidebar activeStep={2} docSignStatus={docSignStatus} showTimeEstimate={false} lpoaFullName={true} combineLpoaAndTax={combineLpoaAndTax} showTaxResale={showTaxResale} />
 
         <div className="flex-1 max-w-2xl ml-20">
           <h2 className="font-bold text-2xl text-[#0E0E0F] mb-1">Bank Account</h2>

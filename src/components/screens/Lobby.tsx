@@ -305,19 +305,56 @@ export function Lobby({ setView, startScenario }: Props) {
           </div>
 
           <div className="grid grid-cols-3 gap-5">
+            {/* 80% Cohort — Base */}
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0077D8] p-6 flex flex-col hover:shadow-md transition-shadow">
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-[#0E0E0F]">Base Scenario</span>
-                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#EFF6FF] text-[#0061A5]">Standard Registration</span>
+                <span className="text-xs font-bold text-[#0E0E0F]">80% Cohort</span>
+                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#EFF6FF] text-[#0061A5]">Base Scenario</span>
               </div>
               <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
                 Net-New User · Single Dealership · Single Verified Bank Account
               </p>
               <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
               <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                Clean happy-path registration with all V2 updates applied. Same core flow as Scenario 1.1, reflecting the latest product and legal decisions.
+                States that require both LPOA and Tax Resale Cert — collected together in one DocuSign envelope. Progress bar shows them on a single combined row.
               </p>
               <PrimaryButton onClick={() => startScenario('v2-base')} className="mt-5 w-full justify-center">
+                Start →
+              </PrimaryButton>
+            </div>
+
+            {/* 15% Cohort — Manual Tax Resale */}
+            <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#F26522] p-6 flex flex-col hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold text-[#0E0E0F]">15% Cohort</span>
+                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#FFF7ED] text-[#9A3412]">Tax Resale Variation</span>
+              </div>
+              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
+                Net-New User · Single Dealership · Single Verified Bank Account
+              </p>
+              <p className="text-xs text-[#55575C] mb-2">📍 Alabama — LPOA via DocuSign · Tax Resale Cert via Specialist</p>
+              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                States that require Tax Resale Cert but collect it manually — LPOA via DocuSign, Tax Resale via specialist outreach. Progress bar shows separate rows for each.
+              </p>
+              <PrimaryButton onClick={() => startScenario('v2-15pct')} className="mt-5 w-full justify-center">
+                Start →
+              </PrimaryButton>
+            </div>
+
+            {/* 5% Cohort — No Tax Resale */}
+            <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#00A576] p-6 flex flex-col hover:shadow-md transition-shadow">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs font-bold text-[#0E0E0F]">5% Cohort</span>
+                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDF4] text-[#166534]">Tax Resale Variation</span>
+              </div>
+              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
+                Net-New User · Single Dealership · Single Verified Bank Account
+              </p>
+              <p className="text-xs text-[#55575C] mb-2">📍 Oregon — Limited Power of Attorney Only via DocuSign</p>
+              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                States that don't require a Tax Resale Certificate at all. LPOA only via DocuSign. Progress bar shows no Tax Resale row.
+              </p>
+              <PrimaryButton onClick={() => startScenario('v2-5pct')} className="mt-5 w-full justify-center">
                 Start →
               </PrimaryButton>
             </div>

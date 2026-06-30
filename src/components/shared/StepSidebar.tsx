@@ -14,7 +14,7 @@ interface Props {
 // Step order (combined):  Dealership Info → ToS → Bank Account → LPOA & Tax Resale
 // activeStep: 0=DealerInfo, 1=ToS, 2=BankAccount, 3=LPOA (or combined), 4=TaxResale (standard only)
 
-export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolution, showTimeEstimate = false, lpoaFullName = false, combineLpoaAndTax = false }: Props) {
+export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolution, showTimeEstimate = false, lpoaFullName = false, combineLpoaAndTax = false, showTaxResale = true }: Props) {
   const steps = combineLpoaAndTax
     ? [
         { label: 'Dealership Information', key: 'dealership' },
@@ -27,7 +27,7 @@ export function StepSidebar({ activeStep, docSignStatus, bankingPendingResolutio
         { label: 'Terms of Service', key: 'tos' },
         { label: 'Bank Account', key: 'bank' },
         { label: lpoaFullName ? 'Limited Power of Attorney' : 'LPOA', key: 'lpoa' },
-        { label: 'TAX Resale', key: 'tax' },
+        ...(showTaxResale ? [{ label: lpoaFullName ? 'Tax Resale Certificate' : 'Tax Resale', key: 'tax' }] : []),
       ]
 
   const getStepStatus = (index: number, key: string) => {

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { View } from '../../../types'
+import type { View, ActiveScenario } from '../../../types'
 import { ACVHeader } from '../../shared/ACVHeader'
 import { StepSidebar } from '../../shared/StepSidebar'
 import { MaterialField } from '../../shared/MaterialField'
@@ -9,6 +9,7 @@ import { ScreenLabel } from '../../shared/ScreenLabel'
 
 interface Props {
   setView: (v: View) => void
+  activeScenario: ActiveScenario
   mobileNumber: string
   setMobileNumber: (s: string) => void
   dealerType: string
@@ -34,7 +35,9 @@ const fields = [
   { label: 'Business Address', value: '1450 Central Ave, Albany, ID 83705' },
 ]
 
-export function V2DealershipInfo({ setView, mobileNumber, setMobileNumber, dealerType, setDealerType, dealerGroupName, setDealerGroupName, isLoggedIn, onLogout }: Props) {
+export function V2DealershipInfo({ setView, activeScenario, mobileNumber, setMobileNumber, dealerType, setDealerType, dealerGroupName, setDealerGroupName, isLoggedIn, onLogout }: Props) {
+  const combineLpoaAndTax = activeScenario === 'v2-base'
+  const showTaxResale = activeScenario !== 'v2-5pct'
   const [smsOptIn, setSmsOptIn] = useState(false)
 
   const [primaryContact, setPrimaryContact] = useState<'yes' | 'no' | null>(null)
@@ -74,7 +77,7 @@ export function V2DealershipInfo({ setView, mobileNumber, setMobileNumber, deale
       <ScreenLabel id="V2-3" name="Dealership Information" />
       <ACVHeader registering onLobby={() => setView('lobby')} isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <div className="flex gap-0 px-10 pt-8 pb-12">
-        <StepSidebar activeStep={0} showTimeEstimate={false} lpoaFullName={true} combineLpoaAndTax={true} />
+        <StepSidebar activeStep={0} showTimeEstimate={false} lpoaFullName={true} combineLpoaAndTax={combineLpoaAndTax} showTaxResale={showTaxResale} />
         <div className="flex-1 max-w-2xl ml-20">
           <h2 className="font-bold text-2xl text-[#0E0E0F] mb-1">Dealership Information</h2>
           <p className="text-sm text-[#55575C] mb-4">Account Info Auto-filled from AuctionAccess</p>

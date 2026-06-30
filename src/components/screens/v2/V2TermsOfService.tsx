@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import type { View } from '../../../types'
+import type { View, ActiveScenario } from '../../../types'
 import { ACVHeader } from '../../shared/ACVHeader'
 import { StepSidebar } from '../../shared/StepSidebar'
 import { PrimaryButton } from '../../shared/PrimaryButton'
@@ -7,6 +7,7 @@ import { ScreenLabel } from '../../shared/ScreenLabel'
 
 interface Props {
   setView: (v: View) => void
+  activeScenario: ActiveScenario
   tosScrolled: boolean
   setTosScrolled: (b: boolean) => void
   isLoggedIn?: boolean
@@ -58,7 +59,9 @@ These terms shall be governed and construed in accordance with the laws of the S
 
 Last Updated: June 18, 2025`
 
-export function V2TermsOfService({ setView, tosScrolled, setTosScrolled, isLoggedIn, onLogout }: Props) {
+export function V2TermsOfService({ setView, activeScenario, tosScrolled, setTosScrolled, isLoggedIn, onLogout }: Props) {
+  const combineLpoaAndTax = activeScenario === 'v2-base'
+  const showTaxResale = activeScenario !== 'v2-5pct'
   const scrollRef = useRef<HTMLDivElement>(null)
   const [agreed, setAgreed] = useState(false)
 
@@ -75,7 +78,7 @@ export function V2TermsOfService({ setView, tosScrolled, setTosScrolled, isLogge
       <ScreenLabel id="V2-4" name="Terms of Service" />
       <ACVHeader registering onLobby={() => setView('lobby')} isLoggedIn={isLoggedIn} onLogout={onLogout} />
       <div className="flex gap-0 px-10 pt-8 pb-12">
-        <StepSidebar activeStep={1} showTimeEstimate={false} lpoaFullName={true} combineLpoaAndTax={true} />
+        <StepSidebar activeStep={1} showTimeEstimate={false} lpoaFullName={true} combineLpoaAndTax={combineLpoaAndTax} showTaxResale={showTaxResale} />
         <div className="flex-1 max-w-2xl ml-20">
           <h2 className="font-bold text-2xl text-[#0E0E0F] mb-1">Terms of Service</h2>
           <p className="text-sm text-[#55575C] mb-4">Please review the ACV Auctions Terms of Service in full before accepting.</p>

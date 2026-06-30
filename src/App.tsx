@@ -55,6 +55,8 @@ import { V2TermsOfService } from './components/screens/v2/V2TermsOfService'
 import { V2Banking } from './components/screens/v2/V2Banking'
 import { V2ACHForm } from './components/screens/v2/V2ACHForm'
 import { V2DocuSign } from './components/screens/v2/V2DocuSign'
+import { V2DocuSignLPOA } from './components/screens/v2/V2DocuSignLPOA'
+import { V2TaxResaleManual } from './components/screens/v2/V2TaxResaleManual'
 import { V2ThankYou } from './components/screens/v2/V2ThankYou'
 
 export default function App() {
@@ -106,7 +108,13 @@ export default function App() {
       scenario === 's4' ? 'alabama'
       : scenario === 's5' ? 'oregon'
       : 'idaho'
-    setDocSignStatus(getInitialDocSign(state))
+    if (scenario === 'v2-15pct') {
+      setDocSignStatus({ lpoa: 'pending', taxResale: 'manual' })
+    } else if (scenario === 'v2-5pct') {
+      setDocSignStatus({ lpoa: 'pending', taxResale: 'not-required' })
+    } else {
+      setDocSignStatus(getInitialDocSign(state))
+    }
     // Resume scenarios: existing user logs in → resume-5m-select
     const isResume = ['r1','r2','r3','r4','r5','r6','r6n'].includes(scenario)
     if (isResume) {
@@ -404,8 +412,8 @@ export default function App() {
             'ToS Status on Application → Verified',
             'NOTE: DocuSign was already sent at application creation — this does not re-trigger DocuSign',
           ]}
-          onViewSF={() => goToSF(activeScenario === 'v2-base' ? 'v2-banking' : 'banking')}
-          onContinue={() => setView(activeScenario === 'v2-base' ? 'v2-banking' : 'banking')}
+          onViewSF={() => goToSF(activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-banking' : 'banking')}
+          onContinue={() => setView(activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-banking' : 'banking')}
         />
       )}
 
@@ -473,8 +481,8 @@ export default function App() {
             'NetSuite: Chase Bank ••••4821 marked as primary for Metro Ford of Albany',
             'Application resume checkpoint updated — banking step complete',
           ]}
-          onViewSF={() => goToSF(activeScenario === 'v2-base' ? 'v2-docusign' : 'docusign-prompt-post-banking')}
-          onContinue={() => setView(activeScenario === 'v2-base' ? 'v2-docusign' : 'docusign-prompt-post-banking')}
+          onViewSF={() => goToSF(activeScenario === 'v2-base' ? 'v2-docusign' : activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-docusign-lpoa' : 'docusign-prompt-post-banking')}
+          onContinue={() => setView(activeScenario === 'v2-base' ? 'v2-docusign' : activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' ? 'v2-docusign-lpoa' : 'docusign-prompt-post-banking')}
         />
       )}
 
@@ -522,7 +530,7 @@ export default function App() {
           docSignStatus={docSignStatus}
           setDocSignStatus={setDocSignStatus}
           onLobby={() => setView('lobby')}
-          returnView={(activeScenario === 's1b' || activeScenario === 'v2-base') ? 'schedule-demo' : 'qualifying-questions'}
+          returnView={(activeScenario === 's1b' || activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct') ? 'schedule-demo' : 'qualifying-questions'}
         />
       )}
 
@@ -662,6 +670,7 @@ export default function App() {
       {view === 'v2-dealership-info' && (
         <V2DealershipInfo
           setView={setView}
+          activeScenario={activeScenario}
           mobileNumber={mobileNumber}
           setMobileNumber={setMobileNumber}
           dealerType={dealerType}
@@ -687,6 +696,7 @@ export default function App() {
       {view === 'v2-terms-of-service' && (
         <V2TermsOfService
           setView={setView}
+          activeScenario={activeScenario}
           tosScrolled={tosScrolled}
           setTosScrolled={setTosScrolled}
           {...sharedProps}
@@ -696,6 +706,7 @@ export default function App() {
       {view === 'v2-banking' && (
         <V2Banking
           setView={setView}
+          activeScenario={activeScenario}
           setPrimaryBankSelected={setPrimaryBankSelected}
           docSignStatus={docSignStatus}
           {...sharedProps}
@@ -705,6 +716,7 @@ export default function App() {
       {view === 'v2-ach-form' && (
         <V2ACHForm
           setView={setView}
+          activeScenario={activeScenario}
           setPrimaryBankSelected={setPrimaryBankSelected}
           docSignStatus={docSignStatus}
           {...sharedProps}
@@ -713,6 +725,24 @@ export default function App() {
 
       {view === 'v2-docusign' && (
         <V2DocuSign
+          setView={setView}
+          docSignStatus={docSignStatus}
+          {...sharedProps}
+        />
+      )}
+
+      {view === 'v2-docusign-lpoa' && (
+        <V2DocuSignLPOA
+          setView={setView}
+          docSignStatus={docSignStatus}
+          nextView={activeScenario === 'v2-15pct' ? 'v2-tax-resale-manual' : 'v2-thank-you'}
+          showTaxResaleInSidebar={activeScenario === 'v2-15pct'}
+          {...sharedProps}
+        />
+      )}
+
+      {view === 'v2-tax-resale-manual' && (
+        <V2TaxResaleManual
           setView={setView}
           docSignStatus={docSignStatus}
           {...sharedProps}
