@@ -49,12 +49,12 @@ const inProgressScenarios = [
 
 // ── MAIN LOBBY ───────────────────────────────────────────────────
 export function Lobby({ startScenario }: Props) {
-  const [activeTab, setActiveTab] = useState<'exec' | 'prototype' | 'updated'>('updated')
+  const [activeTab, setActiveTab] = useState<'exec' | 'updated' | 'prototype'>('updated')
 
   const tabs = [
-    { id: 'exec',      label: 'Executive Summary',         legacy: false },
-    { id: 'prototype', label: 'Interactive Prototype',     legacy: true  },
-    { id: 'updated',   label: 'Updated Prototypes',        legacy: false },
+    { id: 'exec',      label: 'Executive Summary'                       },
+    { id: 'updated',   label: 'Most Current Prototypes (end of June \'26)' },
+    { id: 'prototype', label: 'Initial Prototype (early June)'           },
   ] as const
 
   return (
@@ -64,7 +64,7 @@ export function Lobby({ startScenario }: Props) {
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="font-black text-xl text-[#F26522]">ACV AUCTIONS</p>
-            <p className="text-xs text-[#55575C] mt-0.5">Dealer Registration Process — Interactive Prototype</p>
+            <p className="text-xs text-[#55575C] mt-0.5">ACV Dealer Registration Initiative — Customer-Facing Prototype</p>
           </div>
         </div>
         {/* Tabs */}
@@ -74,7 +74,7 @@ export function Lobby({ startScenario }: Props) {
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
               className={`px-5 py-3 text-sm font-medium cursor-pointer border-b-2 transition-colors
-                ${tab.legacy
+                ${tab.id === 'prototype'
                   ? activeTab === tab.id
                     ? 'border-[#9CA3AF] text-[#6B7280]'
                     : 'border-transparent text-[#9CA3AF] hover:text-[#6B7280]'
@@ -82,7 +82,7 @@ export function Lobby({ startScenario }: Props) {
                     ? 'border-[#F26522] text-[#F26522]'
                     : 'border-transparent text-[#55575C] hover:text-[#0E0E0F]'}`}
             >
-              {tab.legacy ? <span className="flex items-center gap-1.5">{tab.label} <span className="text-[10px] font-normal bg-[#F3F4F6] text-[#9CA3AF] rounded px-1.5 py-0.5 tracking-wide">v1</span></span> : tab.label}
+              {tab.label}
             </button>
           ))}
         </div>
@@ -93,13 +93,13 @@ export function Lobby({ startScenario }: Props) {
       {/* ── EXEC SUMMARY ── */}
       {activeTab === 'exec' && (
         <div className="max-w-4xl mx-auto px-6 py-10 w-full">
-          <h1 className="font-bold text-4xl text-[#0E0E0F] mb-2">ACV Dealer Registration — V1</h1>
-          <p className="text-[#55575C] text-base mb-8">Interactive prototype for internal stakeholder review.</p>
+          <h1 className="font-bold text-4xl text-[#0E0E0F] mb-2">ACV Dealer Registration Initiative</h1>
+          <p className="text-[#55575C] text-base mb-8">Customer-facing prototype for internal review and alignment.</p>
 
           <div className="bg-white border border-[#E8E9EB] rounded-2xl p-8 space-y-5 text-sm text-[#55575C] leading-relaxed">
             <div>
               <p className="font-bold text-sm text-[#0E0E0F] mb-2">Why it exists</p>
-              <p>In V1, ACV is moving away from FormAssembly and toward a custom registration UX integrated directly with Salesforce and NetSuite. This prototype aligns the team on exact process flows, language, and requirements — so that UX can produce ACV-branded designs from a well-defined spec.</p>
+              <p>ACV is moving away from FormAssembly and toward a custom registration UX integrated directly with Salesforce and NetSuite. This prototype aligns the team on exact process flows, language, and requirements — so that UX can produce ACV-branded designs from a well-defined spec.</p>
             </div>
             <div>
               <p className="font-bold text-sm text-[#0E0E0F] mb-2">Design intent</p>
@@ -107,21 +107,21 @@ export function Lobby({ startScenario }: Props) {
             </div>
             <div>
               <p className="font-bold text-sm text-[#0E0E0F] mb-2">What it demonstrates</p>
-              <p>Each scenario shows the customer-facing UX <em>and</em> the backend data flow: how records are created in Salesforce, how integrations with NetSuite and AuctionAccess work, and how compliance documents (POA, Tax Resale Certs) are handled via DocuSign — routed based on the dealer's state.</p>
+              <p>Each scenario shows the customer-facing UX <em>and</em> the backend data flow: how records are created in Salesforce, how integrations with NetSuite and AuctionAccess work, and how compliance documents (Limited Power of Attorney, Tax Resale Certs) are handled via DocuSign — routed based on the dealer's state.</p>
             </div>
             <div>
               <p className="font-bold text-sm text-[#0E0E0F] mb-2">Banking assumption</p>
-              <p>These flows assume JPMorgan validation completes quickly and does not create a poor customer experience. If latency becomes a concern during testing, screens can be reordered — for example, presenting demo scheduling before the banking step.</p>
+              <p>The base scenario covers the majority of dealer registrations and provides the most straightforward walkthrough. Variant paths branch off the base to show nuances driven by factors like the dealer's state (which affects Tax Resale Cert collection), what bank accounts exist in AuctionAccess, whether the dealer is resuming a previous registration session, or whether another person from their dealership has already started the process.</p>
             </div>
             <div>
               <p className="font-bold text-sm text-[#0E0E0F] mb-2">How to leave feedback</p>
-              <p>A blue <strong>💬 Feedback</strong> button appears in the bottom-right corner of every screen. Click it, enter your name, and leave a comment on that specific screen. Others will see your comments in real time. Reference the screen label (e.g. <code className="bg-[#F7F7F8] px-1 rounded text-xs">S1-10</code>) in your comment for extra clarity.</p>
+              <p>Message <strong>Seth Blum</strong> directly in Slack with feedback or questions about any specific screen.</p>
             </div>
           </div>
 
           <div className="mt-8">
-            <PrimaryButton onClick={() => setActiveTab('prototype')} className="px-10">
-              Go to Interactive Prototype →
+            <PrimaryButton onClick={() => setActiveTab('updated')} className="px-10">
+              View Prototypes →
             </PrimaryButton>
           </div>
         </div>
@@ -210,31 +210,25 @@ export function Lobby({ startScenario }: Props) {
       {/* ── UPDATED PROTOTYPES TAB ── */}
       {activeTab === 'updated' && (
         <div className="px-10 pt-8 pb-16">
-          <h2 className="font-bold text-2xl text-[#0E0E0F] mb-1">Updated Prototypes</h2>
-          <p className="text-sm text-[#55575C] mb-2 max-w-3xl">
-            Revised flows incorporating product and legal updates. These run in parallel with the original scenarios — use them to review and validate changes before they replace the originals.
+          <h2 className="font-bold text-2xl text-[#0E0E0F] mb-1">Most Current Prototypes</h2>
+          <p className="text-sm text-[#55575C] mb-4 max-w-3xl">
+            Incorporates product, legal, and cross-functional feedback collected through June 2026.{' '}
+            <a
+              href="https://acvauctions.atlassian.net/wiki/spaces/SAL/pages/7061602306/ACV+Wholesale+Registration+Prototype+Feedback+Summary"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#004E7D] hover:underline font-medium"
+            >
+              View full feedback summary →
+            </a>
           </p>
-          <div className="bg-[#EFF6FF] border border-[#BFD9F7] rounded-xl px-5 py-3 mb-8 max-w-3xl">
-            <p className="text-sm text-[#004E7D]">
-              <span className="font-semibold">What's updated:</span> Progress bar simplified · 5M ID on dealership selection · Editable email on credential creation · Consolidated dealership info screen with expanded contact collection · ToS streamlined to checkbox-only acceptance · "Limited Power of Attorney" used throughout.
-            </p>
-          </div>
 
           {/* ── Base Scenario ── */}
           <div className="grid grid-cols-3 gap-5 mb-12">
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0077D8] p-6 flex flex-col hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-[#0E0E0F]">80% Cohort</span>
-                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#EFF6FF] text-[#0061A5]">Base Scenario</span>
-              </div>
-              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
-                Net-New User · Single Dealership · Single Verified Bank Account
-              </p>
-              <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
-              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                States that require both LPOA and Tax Resale Cert — collected together in one DocuSign envelope. Progress bar shows them on a single combined row.
-              </p>
-              <PrimaryButton onClick={() => startScenario('v2-base')} className="mt-5 w-full justify-center">
+              <p className="font-semibold text-sm text-[#0E0E0F] mb-1">Base Flow</p>
+              <p className="text-xs text-[#8D9199] flex-1">Full registration walkthrough from start to finish</p>
+              <PrimaryButton onClick={() => startScenario('v2-base')} className="mt-4 w-full justify-center">
                 Start →
               </PrimaryButton>
             </div>
@@ -243,43 +237,22 @@ export function Lobby({ startScenario }: Props) {
           {/* ── Tax Resale Variation ── */}
           <div className="mb-3">
             <h3 className="font-bold text-lg text-[#0E0E0F] mb-1">Tax Resale Variation</h3>
-            <p className="text-sm text-[#55575C] mb-6 max-w-2xl">
-              Same base flow — differs only in how the Tax Resale Certificate is collected, which affects the progress bar and post-banking screens.
-            </p>
           </div>
           <div className="grid grid-cols-3 gap-5 mb-12">
             {/* 15% Cohort */}
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#F26522] p-6 flex flex-col hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-[#0E0E0F]">15% Cohort</span>
-                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#FFF7ED] text-[#9A3412]">Tax Resale Variation</span>
-              </div>
-              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
-                Net-New User · Single Dealership · Single Verified Bank Account
-              </p>
-              <p className="text-xs text-[#55575C] mb-2">📍 Alabama — LPOA via DocuSign · Tax Resale Cert via Specialist</p>
-              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                States that require Tax Resale Cert but collect it manually — LPOA via DocuSign, Tax Resale via specialist outreach. Progress bar shows separate rows for each.
-              </p>
-              <PrimaryButton onClick={() => startScenario('v2-15pct')} className="mt-5 w-full justify-center">
+              <p className="font-semibold text-sm text-[#0E0E0F] mb-1">Manual Tax Resale</p>
+              <p className="text-xs text-[#8D9199] flex-1">LPOA via DocuSign · Tax Resale collected by specialist</p>
+              <PrimaryButton onClick={() => startScenario('v2-15pct')} className="mt-4 w-full justify-center">
                 Start →
               </PrimaryButton>
             </div>
 
             {/* 5% Cohort */}
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#00A576] p-6 flex flex-col hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-[#0E0E0F]">5% Cohort</span>
-                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDF4] text-[#166534]">Tax Resale Variation</span>
-              </div>
-              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
-                Net-New User · Single Dealership · Single Verified Bank Account
-              </p>
-              <p className="text-xs text-[#55575C] mb-2">📍 Oregon — Limited Power of Attorney Only via DocuSign</p>
-              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                States that don't require a Tax Resale Certificate at all. LPOA only via DocuSign. Progress bar shows no Tax Resale row.
-              </p>
-              <PrimaryButton onClick={() => startScenario('v2-5pct')} className="mt-5 w-full justify-center">
+              <p className="font-semibold text-sm text-[#0E0E0F] mb-1">No Tax Resale Required</p>
+              <p className="text-xs text-[#8D9199] flex-1">LPOA only via DocuSign</p>
+              <PrimaryButton onClick={() => startScenario('v2-5pct')} className="mt-4 w-full justify-center">
                 Start →
               </PrimaryButton>
             </div>
@@ -288,85 +261,40 @@ export function Lobby({ startScenario }: Props) {
           {/* ── Banking Variation ── */}
           <div className="mb-3">
             <h3 className="font-bold text-lg text-[#0E0E0F] mb-1">Banking Variation</h3>
-            <p className="text-sm text-[#55575C] mb-6 max-w-2xl">
-              Same base flow and Tax Resale handling — differs only in the banking screen based on what AuctionAccess returns and JPMorgan validation results.
-            </p>
           </div>
 
           {/* Row 1 — No accounts + Many accounts all open */}
           <div className="grid grid-cols-3 gap-5 mb-8">
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#8B5CF6] p-6 flex flex-col hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-[#0E0E0F]">No AA Bank Accounts</span>
-                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F5F3FF] text-[#5B21B6]">Banking Variation</span>
-              </div>
-              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
-                Net-New User · Single Dealership · No Accounts on File
-              </p>
-              <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
-              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                AuctionAccess returns zero bank accounts. No NetSuite records created. User is routed directly to the ACH form — no banking selection screen shown.
-              </p>
-              <PrimaryButton onClick={() => startScenario('v2-banking-no-accounts')} className="mt-5 w-full justify-center">
+              <p className="font-semibold text-sm text-[#0E0E0F] mb-1">No Accounts on File</p>
+              <p className="text-xs text-[#8D9199] flex-1">Dealer routed straight to ACH form</p>
+              <PrimaryButton onClick={() => startScenario('v2-banking-no-accounts')} className="mt-4 w-full justify-center">
                 Start →
               </PrimaryButton>
             </div>
 
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#8B5CF6] p-6 flex flex-col hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-[#0E0E0F]">Multiple Accounts — All Open</span>
-                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F5F3FF] text-[#5B21B6]">Banking Variation</span>
-              </div>
-              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
-                Net-New User · Single Dealership · 3 Verified Open Accounts
-              </p>
-              <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
-              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                AuctionAccess returns 3 bank accounts. JPMorgan confirms all are open and active. Dealer selects one as primary — ACH is still available as an alternative.
-              </p>
-              <PrimaryButton onClick={() => startScenario('v2-banking-many')} className="mt-5 w-full justify-center">
+              <p className="font-semibold text-sm text-[#0E0E0F] mb-1">Multiple Accounts</p>
+              <p className="text-xs text-[#8D9199] flex-1">3 open accounts returned — dealer picks primary</p>
+              <PrimaryButton onClick={() => startScenario('v2-banking-many')} className="mt-4 w-full justify-center">
                 Start →
               </PrimaryButton>
             </div>
           </div>
 
-          {/* Row 2 — Closed account display (sub-labeled) */}
-          <div className="mb-3">
-            <p className="text-xs font-semibold text-[#55575C] uppercase tracking-wide mb-4">
-              If we display the closed bank account status confirmed by JPMorgan to the customer
-            </p>
-          </div>
           <div className="grid grid-cols-3 gap-5">
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#8B5CF6] p-6 flex flex-col hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-[#0E0E0F]">Multiple Accounts — One Closed</span>
-                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F5F3FF] text-[#5B21B6]">Banking Variation</span>
-              </div>
-              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
-                Net-New User · Single Dealership · 3 Accounts (1 Closed)
-              </p>
-              <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
-              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                3 accounts from AuctionAccess. JPMorgan confirmed one is closed — shown greyed out with explanatory text, not selectable. Dealer picks from the 2 open accounts.
-              </p>
-              <PrimaryButton onClick={() => startScenario('v2-banking-mixed')} className="mt-5 w-full justify-center">
+              <p className="font-semibold text-sm text-[#0E0E0F] mb-1">Mixed Account Status</p>
+              <p className="text-xs text-[#8D9199] flex-1">One account shown as closed · not selectable</p>
+              <PrimaryButton onClick={() => startScenario('v2-banking-mixed')} className="mt-4 w-full justify-center">
                 Start →
               </PrimaryButton>
             </div>
 
             <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#8B5CF6] p-6 flex flex-col hover:shadow-md transition-shadow">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-xs font-bold text-[#0E0E0F]">Single Closed Account</span>
-                <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F5F3FF] text-[#5B21B6]">Banking Variation</span>
-              </div>
-              <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">
-                Net-New User · Single Dealership · 1 Account (Closed)
-              </p>
-              <p className="text-xs text-[#55575C] mb-2">📍 Idaho — Limited Power of Attorney + Tax Resale Cert via DocuSign</p>
-              <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                1 account from AuctionAccess. JPMorgan confirmed it's closed — displayed greyed out, not selectable. Banking screen shown with ACH as the only path forward.
-              </p>
-              <PrimaryButton onClick={() => startScenario('v2-banking-single-closed')} className="mt-5 w-full justify-center">
+              <p className="font-semibold text-sm text-[#0E0E0F] mb-1">Only Account Closed</p>
+              <p className="text-xs text-[#8D9199] flex-1">ACH is the only path forward</p>
+              <PrimaryButton onClick={() => startScenario('v2-banking-single-closed')} className="mt-4 w-full justify-center">
                 Start →
               </PrimaryButton>
             </div>
@@ -375,38 +303,21 @@ export function Lobby({ startScenario }: Props) {
           {/* ── Resume Variation ── */}
           <div className="mt-10">
             <h3 className="font-bold text-lg text-[#0E0E0F] mb-1">Resume Variation</h3>
-            <p className="text-sm text-[#55575C] mb-6 max-w-2xl">
-              Returning dealer who started registration and is picking up where they left off. Entry: AA lookup → login → dealership selection shows "In Progress" with a Resume button. R1–R4 use the base (80%) cohort. R5 uses the 5% (LPOA only) cohort. R6a–R6b use the 15% cohort (separate LPOA + manual Tax Resale).
-            </p>
 
             {/* Row 1 — R1, R2 */}
             <div className="grid grid-cols-3 gap-5 mb-5">
               <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-[#0E0E0F]">R1</span>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
-                </div>
-                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at Dealership Information</p>
-                <p className="text-xs text-[#55575C] mb-2">📍 Base (80%) — LPOA + Tax Resale via DocuSign</p>
-                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                  Dealer left before completing Dealership Information. Resumes at that screen with prior steps not yet complete.
-                </p>
-                <button onClick={() => startScenario('v2-r1')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">R1 — Dealership Info</p>
+                <p className="text-xs text-[#8D9199] flex-1">Left before completing dealership information</p>
+                <button onClick={() => startScenario('v2-r1')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
                 </button>
               </div>
 
               <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-[#0E0E0F]">R2</span>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
-                </div>
-                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at Terms of Service</p>
-                <p className="text-xs text-[#55575C] mb-2">📍 Base (80%) — LPOA + Tax Resale via DocuSign</p>
-                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                  Dealer completed Dealership Information but left before accepting Terms of Service.
-                </p>
-                <button onClick={() => startScenario('v2-r2')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">R2 — Terms of Service</p>
+                <p className="text-xs text-[#8D9199] flex-1">Dealership info done, ToS not yet accepted</p>
+                <button onClick={() => startScenario('v2-r2')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
                 </button>
               </div>
@@ -415,31 +326,17 @@ export function Lobby({ startScenario }: Props) {
             {/* Row 2 — R3a, R3b */}
             <div className="grid grid-cols-3 gap-5 mb-5">
               <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-[#0E0E0F]">R3a</span>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
-                </div>
-                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at Banking — AA Account on File</p>
-                <p className="text-xs text-[#55575C] mb-2">📍 Base (80%) — LPOA + Tax Resale via DocuSign</p>
-                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                  ToS accepted. Dealer resumes at the banking screen with one AuctionAccess account available to select as primary.
-                </p>
-                <button onClick={() => startScenario('v2-r3a')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">R3a — Banking (AA Account)</p>
+                <p className="text-xs text-[#8D9199] flex-1">ToS done · AuctionAccess account on file</p>
+                <button onClick={() => startScenario('v2-r3a')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
                 </button>
               </div>
 
               <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-[#0E0E0F]">R3b</span>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
-                </div>
-                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at Banking — ACH Form</p>
-                <p className="text-xs text-[#55575C] mb-2">📍 Base (80%) — LPOA + Tax Resale via DocuSign</p>
-                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                  ToS accepted. No AA bank accounts on file — dealer resumes directly at the ACH form to provide banking details.
-                </p>
-                <button onClick={() => startScenario('v2-r3b')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">R3b — Banking (ACH Form)</p>
+                <p className="text-xs text-[#8D9199] flex-1">ToS done · no AA accounts, starts at ACH form</p>
+                <button onClick={() => startScenario('v2-r3b')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
                 </button>
               </div>
@@ -448,69 +345,36 @@ export function Lobby({ startScenario }: Props) {
             {/* Row 3 — R4, R5 */}
             <div className="grid grid-cols-3 gap-5 mb-5">
               <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-[#0E0E0F]">R4</span>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
-                </div>
-                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at DocuSign — Combined LPOA + Tax Resale</p>
-                <p className="text-xs text-[#55575C] mb-2">📍 Base (80%) — LPOA + Tax Resale via DocuSign</p>
-                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                  Banking complete. Dealer resumes at the combined DocuSign screen — both LPOA and Tax Resale Cert pending in a single envelope.
-                </p>
-                <button onClick={() => startScenario('v2-r4')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">R4 — DocuSign</p>
+                <p className="text-xs text-[#8D9199] flex-1">Banking done · LPOA + Tax Resale pending</p>
+                <button onClick={() => startScenario('v2-r4')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
                 </button>
               </div>
 
               <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-[#0E0E0F]">R5</span>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
-                </div>
-                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at DocuSign — LPOA Only</p>
-                <p className="text-xs text-[#55575C] mb-2">📍 5% Cohort — LPOA only, no Tax Resale required</p>
-                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                  Banking complete. Dealer resumes at the LPOA-only DocuSign screen. No Tax Resale row appears in the progress bar.
-                </p>
-                <button onClick={() => startScenario('v2-r5')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">R5 — DocuSign (LPOA Only)</p>
+                <p className="text-xs text-[#8D9199] flex-1">Banking done · LPOA only, no Tax Resale</p>
+                <button onClick={() => startScenario('v2-r5')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
                 </button>
               </div>
             </div>
 
             {/* Row 4 — R6a, R6b (15% cohort) */}
-            <div className="mb-3">
-              <p className="text-xs font-semibold text-[#55575C] uppercase tracking-wide mb-4">
-                15% Cohort — Separate LPOA & manual Tax Resale collection
-              </p>
-            </div>
             <div className="grid grid-cols-3 gap-5">
               <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-[#0E0E0F]">R6a</span>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
-                </div>
-                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at LPOA Screen — LPOA Pending</p>
-                <p className="text-xs text-[#55575C] mb-2">📍 15% Cohort — LPOA via DocuSign · Tax Resale via Specialist</p>
-                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                  Banking complete. LPOA not yet signed — dealer resumes at the LPOA DocuSign screen. Tax Resale is still pending manual collection by a specialist.
-                </p>
-                <button onClick={() => startScenario('v2-r6a')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">R6a — LPOA Pending</p>
+                <p className="text-xs text-[#8D9199] flex-1">Manual Tax Resale cohort · LPOA not yet signed</p>
+                <button onClick={() => startScenario('v2-r6a')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
                 </button>
               </div>
 
               <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0D9488] p-6 flex flex-col hover:shadow-md transition-shadow">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-xs font-bold text-[#0E0E0F]">R6b</span>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#F0FDFA] text-[#0F766E]">Resume</span>
-                </div>
-                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Resume at Tax Resale Screen — LPOA Signed</p>
-                <p className="text-xs text-[#55575C] mb-2">📍 15% Cohort — LPOA via DocuSign · Tax Resale via Specialist</p>
-                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                  Banking complete, LPOA already received. Dealer resumes at the Tax Resale manual screen — specialist contact info shown, LPOA marked as signed in the progress bar.
-                </p>
-                <button onClick={() => startScenario('v2-r6b')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">R6b — Tax Resale Pending</p>
+                <p className="text-xs text-[#8D9199] flex-1">Manual Tax Resale cohort · LPOA already signed</p>
+                <button onClick={() => startScenario('v2-r6b')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
                 </button>
               </div>
@@ -518,41 +382,24 @@ export function Lobby({ startScenario }: Props) {
           </div>
 
           {/* ── In Progress Variation ── */}
-          <div className="mt-10 border-l-4 border-l-[#F97316] pl-5">
+          <div className="mt-10">
             <h3 className="font-bold text-lg text-[#0E0E0F] mb-1">In Progress Variation</h3>
-            <p className="text-sm text-[#55575C] mb-5">
-              Dealer encounters an application already started by another affiliated user. Two paths: existing ACV user (sees their registered dealership + the blocked one), and net-new user (only sees the blocked dealership). After the specialist cancels via Salesforce, the dealer can start fresh.
-            </p>
             <div className="grid grid-cols-2 gap-4">
 
               {/* V2-IP1 */}
               <div className="border border-[#E8E9EB] rounded-xl p-5 flex flex-col">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="font-mono text-xs bg-[#FFF7ED] text-[#9A3412] border border-[#FED7AA] rounded px-2 py-0.5">V2-IP1</span>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#FFF7ED] text-[#C2410C]">In Progress</span>
-                </div>
-                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Existing ACV User — Application Blocked by Another User</p>
-                <p className="text-xs text-[#55575C] mb-2">AA lookup → MFA → Sign In → In Progress screen</p>
-                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                  Existing ACV user sees Speed Auto Group (registered/joined) and Metro Ford of Albany (in progress by someone else). Must cancel through registration specialist to proceed.
-                </p>
-                <button onClick={() => startScenario('v2-ip1')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">Existing User — Blocked</p>
+                <p className="text-xs text-[#8D9199] flex-1">Has a prior registered dealership · hits in-progress wall</p>
+                <button onClick={() => startScenario('v2-ip1')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
                 </button>
               </div>
 
               {/* V2-IP2 */}
               <div className="border border-[#E8E9EB] rounded-xl p-5 flex flex-col">
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="font-mono text-xs bg-[#FFF7ED] text-[#9A3412] border border-[#FED7AA] rounded px-2 py-0.5">V2-IP2</span>
-                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#FFF7ED] text-[#C2410C]">In Progress</span>
-                </div>
-                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Net-New User — Application Blocked by Another User</p>
-                <p className="text-xs text-[#55575C] mb-2">AA lookup → MFA → Create Credentials → In Progress screen</p>
-                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
-                  Net-new user creates credentials but hits the in-progress wall — Metro Ford of Albany is already being registered by another user. Specialist cancellation required to start fresh.
-                </p>
-                <button onClick={() => startScenario('v2-ip2')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">New User — Blocked</p>
+                <p className="text-xs text-[#8D9199] flex-1">Brand new to ACV · hits in-progress wall after creating credentials</p>
+                <button onClick={() => startScenario('v2-ip2')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
                 </button>
               </div>
