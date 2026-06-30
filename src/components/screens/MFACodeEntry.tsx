@@ -29,7 +29,7 @@ export function MFACodeEntry({ setView, setLoggedIn, onLobby, activeScenario }: 
   const [error, setError] = useState(false)
   const [verified, setVerified] = useState(false)
 
-  const existingUserScenarios = ['s9', 's8b', 'r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'v2-r1', 'v2-r2', 'v2-r3a', 'v2-r3b', 'v2-r4', 'v2-r5', 'v2-r6a', 'v2-r6b']
+  const existingUserScenarios = ['s9', 's8b', 'r1', 'r2', 'r3', 'r4', 'r5', 'r6', 'v2-r1', 'v2-r2', 'v2-r3a', 'v2-r3b', 'v2-r4', 'v2-r5', 'v2-r6a', 'v2-r6b', 'v2-ip1']
   const isExistingUser = existingUserScenarios.includes(activeScenario ?? '')
 
   const handleVerify = () => {
@@ -45,7 +45,7 @@ export function MFACodeEntry({ setView, setLoggedIn, onLobby, activeScenario }: 
   const getNextView = (): View => {
     if (isExistingUser) return 'existing-user-login'
     if (activeScenario === 's8') return 'join-flow'
-    if (activeScenario === 'v2-base' || activeScenario === 'v2-15pct' || activeScenario === 'v2-5pct' || activeScenario === 'v2-banking-no-accounts' || activeScenario === 'v2-banking-many' || activeScenario === 'v2-banking-mixed' || activeScenario === 'v2-banking-single-closed') return 'v2-create-credentials'
+    if (activeScenario?.startsWith('v2-')) return 'v2-create-credentials'
     // r6n = net-new user, must create credentials before seeing in-progress screen
     return 'create-credentials'
   }

@@ -5,9 +5,10 @@ import { ScreenLabel } from '../shared/ScreenLabel'
 interface Props {
   setView: (v: View) => void
   setApplicationCancelled?: (b: boolean) => void
+  returnView?: View
 }
 
-export function MockSFCancel({ setView, setApplicationCancelled }: Props) {
+export function MockSFCancel({ setView, setApplicationCancelled, returnView }: Props) {
   const [cancelling, setCancelling] = useState(false)
   const [cancelled, setCancelled] = useState(false)
 
@@ -133,7 +134,7 @@ export function MockSFCancel({ setView, setApplicationCancelled }: Props) {
                 </div>
               </div>
               <button
-                onClick={() => setView('in-progress-other-user')}
+                onClick={() => setView(returnView ?? 'in-progress-other-user')}
                 className="text-sm font-semibold text-white rounded-full px-8 py-3 cursor-pointer hover:opacity-90"
                 style={{ background: 'linear-gradient(160deg, #F26522 14%, #FC4243 86%)' }}
               >

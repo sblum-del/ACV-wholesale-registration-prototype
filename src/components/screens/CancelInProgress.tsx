@@ -5,9 +5,10 @@ interface Props {
   setView: (v: View) => void
   isLoggedIn?: boolean
   onLogout?: () => void
+  backView?: View
 }
 
-export function CancelInProgress({ setView }: Props) {
+export function CancelInProgress({ setView, backView }: Props) {
   return (
     <div className="min-h-screen bg-[#F5F5F7] flex flex-col">
       <ScreenLabel id="CANCEL-5" name="Cancel Existing Application" />
@@ -94,7 +95,7 @@ export function CancelInProgress({ setView }: Props) {
           {/* Actions */}
           <div className="flex gap-3">
             <button
-              onClick={() => setView('in-progress-other-user')}
+              onClick={() => setView(backView ?? 'in-progress-other-user')}
               className="flex-1 border border-[#D1D3D6] text-[#55575C] rounded-full py-3 text-sm font-semibold cursor-pointer hover:bg-[#F7F7F8]"
             >
               Go back

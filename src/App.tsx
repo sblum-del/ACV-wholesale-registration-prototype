@@ -59,6 +59,7 @@ import { V2DocuSignLPOA } from './components/screens/v2/V2DocuSignLPOA'
 import { V2TaxResaleManual } from './components/screens/v2/V2TaxResaleManual'
 import { V2ThankYou } from './components/screens/v2/V2ThankYou'
 import { V2Resume5MSelect } from './components/screens/v2/V2Resume5MSelect'
+import { V2InProgressOtherUser } from './components/screens/v2/V2InProgressOtherUser'
 
 export default function App() {
   const [view, setView] = useState<View>('lobby')
@@ -109,6 +110,7 @@ export default function App() {
     setActiveScenario(scenario)
     setV2Products([])
     setSelectedBankInfo(null)
+    setApplicationCancelled(false)
     const state: DealerState =
       scenario === 's4' ? 'alabama'
       : scenario === 's5' ? 'oregon'
@@ -123,7 +125,7 @@ export default function App() {
       setDocSignStatus(getInitialDocSign(state))
     }
     // Resume scenarios: existing user logs in → resume select screen
-    const isResume = ['r1','r2','r3','r4','r5','r6','r6n','v2-r1','v2-r2','v2-r3a','v2-r3b','v2-r4','v2-r5','v2-r6a','v2-r6b'].includes(scenario)
+    const isResume = ['r1','r2','r3','r4','r5','r6','r6n','v2-r1','v2-r2','v2-r3a','v2-r3b','v2-r4','v2-r5','v2-r6a','v2-r6b','v2-ip1','v2-ip2'].includes(scenario)
     if (isResume) {
       setIsLoggedIn(false)
       setView('aa-validation')
@@ -204,11 +206,19 @@ export default function App() {
       )}
 
       {view === 'cancel-in-progress' && (
-        <CancelInProgress setView={setView} {...sharedProps} />
+        <CancelInProgress
+          setView={setView}
+          backView={isV2 ? 'v2-in-progress-other-user' : 'in-progress-other-user'}
+          {...sharedProps}
+        />
       )}
 
       {view === 'mock-sf-cancel' && (
-        <MockSFCancel setView={setView} setApplicationCancelled={setApplicationCancelled} />
+        <MockSFCancel
+          setView={setView}
+          setApplicationCancelled={setApplicationCancelled}
+          returnView={isV2 ? 'v2-in-progress-other-user' : 'in-progress-other-user'}
+        />
       )}
 
       {view === 'sf-interstitial-cancel-restart' && (
@@ -631,7 +641,7 @@ export default function App() {
 
       {/* ── V2 UPDATED PROTOTYPE FLOW ── */}
       {view === 'v2-create-credentials' && (
-        <V2CreateCredentials setView={setView} onLobby={() => setView('lobby')} />
+        <V2CreateCredentials setView={setView} onLobby={() => setView('lobby')} activeScenario={activeScenario} />
       )}
 
       {view === 'v2-select-dealership' && (
@@ -794,6 +804,15 @@ export default function App() {
           activeScenario={activeScenario}
           setDocSignStatus={setDocSignStatus}
           onLogout={handleLogout}
+        />
+      )}
+
+      {view === 'v2-in-progress-other-user' && (
+        <V2InProgressOtherUser
+          setView={setView}
+          applicationCancelled={applicationCancelled}
+          isExistingUser={activeScenario === 'v2-ip1'}
+          {...sharedProps}
         />
       )}
     </div>

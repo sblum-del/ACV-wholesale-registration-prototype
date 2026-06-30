@@ -601,6 +601,49 @@ export function Lobby({ setView, startScenario }: Props) {
             </div>
           </div>
 
+          {/* ── In Progress Variation ── */}
+          <div className="mt-10 border-l-4 border-l-[#F97316] pl-5">
+            <h3 className="font-bold text-lg text-[#0E0E0F] mb-1">In Progress Variation</h3>
+            <p className="text-sm text-[#55575C] mb-5">
+              Dealer encounters an application already started by another affiliated user. Two paths: existing ACV user (sees their registered dealership + the blocked one), and net-new user (only sees the blocked dealership). After the specialist cancels via Salesforce, the dealer can start fresh.
+            </p>
+            <div className="grid grid-cols-2 gap-4">
+
+              {/* V2-IP1 */}
+              <div className="border border-[#E8E9EB] rounded-xl p-5 flex flex-col">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-xs bg-[#FFF7ED] text-[#9A3412] border border-[#FED7AA] rounded px-2 py-0.5">V2-IP1</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#FFF7ED] text-[#C2410C]">In Progress</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Existing ACV User — Application Blocked by Another User</p>
+                <p className="text-xs text-[#55575C] mb-2">AA lookup → MFA → Sign In → In Progress screen</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                  Existing ACV user sees Speed Auto Group (registered/joined) and Metro Ford of Albany (in progress by someone else). Must cancel through registration specialist to proceed.
+                </p>
+                <button onClick={() => startScenario('v2-ip1')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                  Start →
+                </button>
+              </div>
+
+              {/* V2-IP2 */}
+              <div className="border border-[#E8E9EB] rounded-xl p-5 flex flex-col">
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="font-mono text-xs bg-[#FFF7ED] text-[#9A3412] border border-[#FED7AA] rounded px-2 py-0.5">V2-IP2</span>
+                  <span className="text-[10px] font-semibold tracking-wide uppercase rounded-full px-2.5 py-0.5 bg-[#FFF7ED] text-[#C2410C]">In Progress</span>
+                </div>
+                <p className="font-semibold text-sm text-[#0E0E0F] leading-snug mb-1">Net-New User — Application Blocked by Another User</p>
+                <p className="text-xs text-[#55575C] mb-2">AA lookup → MFA → Create Credentials → In Progress screen</p>
+                <p className="text-xs text-[#55575C] leading-relaxed flex-1">
+                  Net-new user creates credentials but hits the in-progress wall — Metro Ford of Albany is already being registered by another user. Specialist cancellation required to start fresh.
+                </p>
+                <button onClick={() => startScenario('v2-ip2')} className="mt-5 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
+                  Start →
+                </button>
+              </div>
+
+            </div>
+          </div>
+
         </div>
       )}
     </div>

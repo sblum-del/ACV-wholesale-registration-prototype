@@ -64,6 +64,7 @@ export type View =
   | 'v2-tax-resale-manual'
   | 'v2-thank-you'
   | 'v2-resume-5m-select'
+  | 'v2-in-progress-other-user'
 
 export interface Dealership5M {
   id: string
@@ -76,7 +77,7 @@ export interface Dealership5M {
 }
 
 export type DealerState = 'idaho' | 'alabama' | 'oregon'
-export type ActiveScenario = 's1' | 's1b' | 's2' | 's3' | 's4' | 's5' | 's6' | 's7' | 's8' | 's8b' | 's9' | 's10' | 's11' | 'r1' | 'r2' | 'r3' | 'r4' | 'r5' | 'r6' | 'r6n' | 'v2-base' | 'v2-15pct' | 'v2-5pct' | 'v2-banking-no-accounts' | 'v2-banking-many' | 'v2-banking-mixed' | 'v2-banking-single-closed' | 'v2-r1' | 'v2-r2' | 'v2-r3a' | 'v2-r3b' | 'v2-r4' | 'v2-r5' | 'v2-r6a' | 'v2-r6b'
+export type ActiveScenario = 's1' | 's1b' | 's2' | 's3' | 's4' | 's5' | 's6' | 's7' | 's8' | 's8b' | 's9' | 's10' | 's11' | 'r1' | 'r2' | 'r3' | 'r4' | 'r5' | 'r6' | 'r6n' | 'v2-base' | 'v2-15pct' | 'v2-5pct' | 'v2-banking-no-accounts' | 'v2-banking-many' | 'v2-banking-mixed' | 'v2-banking-single-closed' | 'v2-r1' | 'v2-r2' | 'v2-r3a' | 'v2-r3b' | 'v2-r4' | 'v2-r5' | 'v2-r6a' | 'v2-r6b' | 'v2-ip1' | 'v2-ip2'
 
 export interface DocSignStatus {
   lpoa: 'pending' | 'received'

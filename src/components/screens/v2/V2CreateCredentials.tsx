@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import type { View } from '../../../types'
+import type { View, ActiveScenario } from '../../../types'
 import { MaterialField } from '../../shared/MaterialField'
 import { PrimaryButton } from '../../shared/PrimaryButton'
 import { ScreenLabel } from '../../shared/ScreenLabel'
@@ -7,9 +7,10 @@ import { ScreenLabel } from '../../shared/ScreenLabel'
 interface Props {
   setView: (v: View) => void
   onLobby?: () => void
+  activeScenario?: ActiveScenario
 }
 
-export function V2CreateCredentials({ setView, onLobby }: Props) {
+export function V2CreateCredentials({ setView, onLobby, activeScenario }: Props) {
   const [email, setEmail] = useState('jharlow@metrofordalbany.com')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
@@ -64,7 +65,7 @@ export function V2CreateCredentials({ setView, onLobby }: Props) {
             </button>
             <PrimaryButton
               disabled={!canContinue}
-              onClick={() => setView('v2-select-dealership')}
+              onClick={() => setView(activeScenario === 'v2-ip2' ? 'v2-in-progress-other-user' : 'v2-select-dealership')}
             >
               Continue →
             </PrimaryButton>
