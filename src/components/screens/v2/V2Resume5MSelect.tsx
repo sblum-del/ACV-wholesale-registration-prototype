@@ -77,7 +77,7 @@ export function V2Resume5MSelect({ setView, activeScenario, setDocSignStatus, on
       {loading && (
         <div className="fixed inset-0 bg-white/80 flex flex-col items-center justify-center z-50">
           <div className="w-10 h-10 border-4 border-[#0077D8] border-t-transparent rounded-full animate-spin" />
-          <p className="text-sm text-[#55575C] mt-4 font-medium">Reading your application from Salesforce...</p>
+          <p className="text-sm text-[#55575C] mt-4 font-medium">Loading your application...</p>
           <p className="text-xs text-[#8D9199] mt-1">Identifying where you left off</p>
         </div>
       )}
