@@ -11,11 +11,11 @@ interface Props {
 }
 
 export function V2CreateCredentials({ setView, onLobby, activeScenario }: Props) {
-  const [email, setEmail] = useState('jharlow@metrofordalbany.com')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
 
-  const canContinue = password.length >= 1
+  const canContinue = email.length >= 1 && password.length >= 1
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -38,13 +38,6 @@ export function V2CreateCredentials({ setView, onLobby, activeScenario }: Props)
           <p className="text-sm text-[#55575C] mt-2 mb-6">
             Your identity has been verified. Set up your ACV login credentials to complete account creation.
           </p>
-
-          <div className="bg-[#EFF6FF] border border-[#BFD9F7] rounded-lg p-3 flex items-start gap-2 mb-6">
-            <span className="shrink-0 mt-0.5">💡</span>
-            <span className="text-sm text-[#004E7D]">
-              Your email address has been pre-populated from your AuctionAccess record. You can update it here if needed — this will be your ACV login email.
-            </span>
-          </div>
 
           <div className="space-y-6">
             <MaterialField label="Email Address" value={email} onChange={setEmail} />
