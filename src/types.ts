@@ -65,6 +65,8 @@ export type View =
   | 'v2-thank-you'
   | 'v2-resume-5m-select'
   | 'v2-in-progress-other-user'
+  | 'sf-app-record-tr'
+  | 'sf-app-record-no-tr'
 
 export interface Dealership5M {
   id: string

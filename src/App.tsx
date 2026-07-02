@@ -60,6 +60,7 @@ import { V2TaxResaleManual } from './components/screens/v2/V2TaxResaleManual'
 import { V2ThankYou } from './components/screens/v2/V2ThankYou'
 import { V2Resume5MSelect } from './components/screens/v2/V2Resume5MSelect'
 import { V2InProgressOtherUser } from './components/screens/v2/V2InProgressOtherUser'
+import { SalesforceAppRecord } from './components/screens/SalesforceAppRecord'
 
 export default function App() {
   const [view, setView] = useState<View>('lobby')
@@ -814,6 +815,13 @@ export default function App() {
           isExistingUser={activeScenario === 'v2-ip1'}
           {...sharedProps}
         />
+      )}
+
+      {view === 'sf-app-record-tr' && (
+        <SalesforceAppRecord setView={setView} taxResaleRequired={true} />
+      )}
+      {view === 'sf-app-record-no-tr' && (
+        <SalesforceAppRecord setView={setView} taxResaleRequired={false} />
       )}
     </div>
   )

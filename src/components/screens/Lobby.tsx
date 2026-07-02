@@ -48,7 +48,7 @@ const inProgressScenarios = [
 ]
 
 // ── MAIN LOBBY ───────────────────────────────────────────────────
-export function Lobby({ startScenario }: Props) {
+export function Lobby({ setView, startScenario }: Props) {
   const [activeTab, setActiveTab] = useState<'exec' | 'updated' | 'prototype'>('updated')
 
   const tabs = [
@@ -376,6 +376,34 @@ export function Lobby({ startScenario }: Props) {
                 <p className="text-xs text-[#8D9199] flex-1">Manual Tax Resale cohort · LPOA already signed</p>
                 <button onClick={() => startScenario('v2-r6b')} className="mt-4 w-full bg-[#0077D8] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#005FAD] transition-colors text-center">
                   Start →
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Salesforce — Application Record ── */}
+          <div className="mt-10">
+            <h3 className="font-bold text-lg text-[#0E0E0F] mb-1">Salesforce — Application Record</h3>
+            <p className="text-xs text-[#8D9199] mb-4 max-w-2xl">Specialist-facing page layout. Shows all Application record fields, conditional Tax Resale section, approval gate status, and activity timeline. Two variants: one state that requires a Tax Resale Certificate, one that does not.</p>
+            <div className="grid grid-cols-3 gap-5 mb-10">
+              <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0C2340] p-6 flex flex-col hover:shadow-md transition-shadow">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">With Tax Resale Cert</p>
+                <p className="text-xs text-[#8D9199] flex-1">New York — all 5 sections shown · LPOA + Tax Resale both received</p>
+                <button
+                  onClick={() => setView('sf-app-record-tr')}
+                  className="mt-4 w-full bg-[#0C2340] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#1a3a5c] transition-colors text-center"
+                >
+                  View →
+                </button>
+              </div>
+              <div className="bg-white rounded-xl border border-[#E8E9EB] border-l-4 border-l-[#0C2340] p-6 flex flex-col hover:shadow-md transition-shadow">
+                <p className="font-semibold text-sm text-[#0E0E0F] mb-1">Without Tax Resale Cert</p>
+                <p className="text-xs text-[#8D9199] flex-1">Idaho — Tax Resale section hidden · LPOA only</p>
+                <button
+                  onClick={() => setView('sf-app-record-no-tr')}
+                  className="mt-4 w-full bg-[#0C2340] text-white rounded-lg py-2.5 text-sm font-semibold cursor-pointer hover:bg-[#1a3a5c] transition-colors text-center"
+                >
+                  View →
                 </button>
               </div>
             </div>
